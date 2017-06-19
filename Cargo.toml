@@ -1,0 +1,8 @@
+[package]
+name = "ggetris"
+version = "0.1.0"
+authors = ["chinatsu <lolexplode@gmail.com>"]
+
+[dependencies]
+ggez = "0.3"
+rand = "0.3.15"
