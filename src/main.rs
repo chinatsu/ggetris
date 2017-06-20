@@ -30,29 +30,28 @@ impl MainState {
 }
 
 impl event::EventHandler for MainState {
-    fn update(&mut self, _ctx: &mut Context, dt: Duration) -> GameResult<()> {
+    fn update(&mut self, _ctx: &mut Context, _dt: Duration) -> GameResult<()> {
         if self.input.down {
             self.input.down_frames += 1;
             if self.input.down_frames % 2 == 0 {
-                self.piece.shift(Point { x: 0.0, y: 32.0 })
+                self.piece.shift(Point { x: 0.0, y: 1.0 })
             }
         }
-        if self.input.das_left > 1.0 && self.input.left {
-            self.piece.shift(Point { x: -32.0, y: 0.0 });
+        if self.input.das_left > 16 && self.input.left {
+            self.piece.shift(Point { x: -1.0, y: 0.0 });
         } else if self.input.left {
-            if self.input.das_left == 0.0 {
-                self.piece.shift(Point { x: -32.0, y: 0.0 });
+            if self.input.das_left == 0 {
+                self.piece.shift(Point { x: -1.0, y: 0.0 });
             }
-            // silly and hacky :(
-            self.input.das_left += dt.subsec_nanos() as f64 / 100000000.0;
+            self.input.das_left += 1;
         }
-        if self.input.das_right > 1.0 && self.input.right {
-            self.piece.shift(Point { x: 32.0, y: 0.0 });
+        if self.input.das_right > 16 && self.input.right {
+            self.piece.shift(Point { x: 1.0, y: 0.0 });
         } else if self.input.right {
-            if self.input.das_right == 0.0 {
-                self.piece.shift(Point { x: 32.0, y: 0.0 });
+            if self.input.das_right == 0 {
+                self.piece.shift(Point { x: 1.0, y: 0.0 });
             }
-            self.input.das_right += dt.subsec_nanos() as f64 / 100000000.0;
+            self.input.das_right += 1;
         }
         Ok(())
     }
@@ -98,11 +97,11 @@ impl event::EventHandler for MainState {
             }
             event::Keycode::Left => {
                 self.input.left = false;
-                self.input.das_left = 0.0;
+                self.input.das_left = 0;
             }
             event::Keycode::Right => {
                 self.input.right = false;
-                self.input.das_right = 0.0;
+                self.input.das_right = 0;
             }
             _ => { }
         }

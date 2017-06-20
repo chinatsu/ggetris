@@ -12,28 +12,28 @@ pub struct Piecedef {
 pub const T: Piecedef = Piecedef {
     shape: [
         [
-            Point { x: -32.0, y: 0.0 },
+            Point { x: -1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: 0.0 },
-            Point { x: 0.0, y: -32.0 }
+            Point { x: 1.0, y: 0.0 },
+            Point { x: 0.0, y: -1.0 }
         ],
         [
-            Point { x: 0.0, y: 32.0 },
+            Point { x: 0.0, y: 1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: -32.0 },
-            Point { x: 32.0, y: 0.0 }
+            Point { x: 0.0, y: -1.0 },
+            Point { x: 1.0, y: 0.0 }
         ],
         [
-            Point { x: -32.0, y: 0.0 },
+            Point { x: -1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: 0.0 },
-            Point { x: 0.0, y: 32.0 }
+            Point { x: 1.0, y: 0.0 },
+            Point { x: 0.0, y: 1.0 }
         ],
         [
-            Point { x: 0.0, y: 32.0 },
+            Point { x: 0.0, y: 1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: -32.0 },
-            Point { x: -32.0, y: 0.0 }
+            Point { x: 0.0, y: -1.0 },
+            Point { x: -1.0, y: 0.0 }
         ]
     ],
     id: 't'
@@ -42,28 +42,28 @@ pub const T: Piecedef = Piecedef {
 pub const L: Piecedef = Piecedef {
     shape: [
         [
-            Point { x: 32.0, y: -32.0 },
-            Point { x: -32.0, y: 0.0 },
+            Point { x: 1.0, y: -1.0 },
+            Point { x: -1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: 0.0 }
+            Point { x: 1.0, y: 0.0 }
         ],
         [
-            Point { x: 0.0, y: -32.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: 32.0 },
-            Point { x: 32.0, y: 32.0 }
+            Point { x: 0.0, y: 1.0 },
+            Point { x: 1.0, y: 1.0 }
         ],
         [
-            Point { x: -32.0, y: 32.0 },
-            Point { x: -32.0, y: 0.0 },
+            Point { x: -1.0, y: 1.0 },
+            Point { x: -1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: 0.0 }
+            Point { x: 1.0, y: 0.0 }
         ],
         [
-            Point { x: -32.0, y: -32.0 },
-            Point { x: 0.0, y: -32.0 },
+            Point { x: -1.0, y: -1.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: 32.0 }
+            Point { x: 0.0, y: 1.0 }
         ],
     ],
     id: 'l'
@@ -72,28 +72,28 @@ pub const L: Piecedef = Piecedef {
 pub const O: Piecedef = Piecedef {
     shape: [
         [
-            Point { x: 0.0, y: -32.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: -32.0 },
-            Point { x: 32.0, y: 0.0 }
+            Point { x: 1.0, y: -1.0 },
+            Point { x: 1.0, y: 0.0 }
         ],
         [
-            Point { x: 0.0, y: -32.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: -32.0 },
-            Point { x: 32.0, y: 0.0 }
+            Point { x: 1.0, y: -1.0 },
+            Point { x: 1.0, y: 0.0 }
         ],
         [
-            Point { x: 0.0, y: -32.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: -32.0 },
-            Point { x: 32.0, y: 0.0 }
+            Point { x: 1.0, y: -1.0 },
+            Point { x: 1.0, y: 0.0 }
         ],
         [
-            Point { x: 0.0, y: -32.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: -32.0 },
-            Point { x: 32.0, y: 0.0 }
+            Point { x: 1.0, y: -1.0 },
+            Point { x: 1.0, y: 0.0 }
         ]
     ],
     id: 'o'
@@ -102,28 +102,28 @@ pub const O: Piecedef = Piecedef {
 pub const S: Piecedef = Piecedef {
     shape: [
         [
-            Point { x: -32.0, y: 0.0 },
+            Point { x: -1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: -32.0 },
-            Point { x: 32.0, y: -32.0 }
+            Point { x: 0.0, y: -1.0 },
+            Point { x: 1.0, y: -1.0 }
         ],
         [
-            Point { x: 0.0, y: -32.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: 0.0 },
-            Point { x: 32.0, y: 32.0 }
+            Point { x: 1.0, y: 0.0 },
+            Point { x: 1.0, y: 1.0 }
         ],
         [
-            Point { x: -32.0, y: 32.0 },
-            Point { x: 0.0, y: 32.0 },
+            Point { x: -1.0, y: 1.0 },
+            Point { x: 0.0, y: 1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: 0.0 }
+            Point { x: 1.0, y: 0.0 }
         ],
         [
-            Point { x: -32.0, y: -32.0 },
-            Point { x: -32.0, y: 0.0 },
+            Point { x: -1.0, y: -1.0 },
+            Point { x: -1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: 32.0 }
+            Point { x: 0.0, y: 1.0 }
         ]
     ],
     id: 's'
@@ -132,28 +132,28 @@ pub const S: Piecedef = Piecedef {
 pub const Z: Piecedef = Piecedef {
     shape: [
         [
-            Point { x: -32.0, y: -32.0 },
-            Point { x: 0.0, y: -32.0 },
+            Point { x: -1.0, y: -1.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: 0.0 }
+            Point { x: 1.0, y: 0.0 }
         ],
         [
-            Point { x: 32.0, y: -32.0 },
-            Point { x: 32.0, y: 0.0 },
+            Point { x: 1.0, y: -1.0 },
+            Point { x: 1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: 32.0 }
+            Point { x: 0.0, y: 1.0 }
         ],
         [
-            Point { x: -32.0, y: 0.0 },
+            Point { x: -1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: 32.0 },
-            Point { x: 32.0, y: 32.0 }
+            Point { x: 0.0, y: 1.0 },
+            Point { x: 1.0, y: 1.0 }
         ],
         [
-            Point { x: 0.0, y: -32.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: -32.0, y: 0.0 },
-            Point { x: -32.0, y: 32.0 }
+            Point { x: -1.0, y: 0.0 },
+            Point { x: -1.0, y: 1.0 }
         ]
     ],
     id: 'z'
@@ -162,28 +162,28 @@ pub const Z: Piecedef = Piecedef {
 pub const J: Piecedef = Piecedef {
     shape: [
         [
-            Point { x: -32.0, y: -32.0 },
-            Point { x: -32.0, y: 0.0 },
+            Point { x: -1.0, y: -1.0 },
+            Point { x: -1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: 0.0 }
+            Point { x: 1.0, y: 0.0 }
         ],
         [
-            Point { x: 32.0, y: -32.0 },
-            Point { x: 0.0, y: -32.0 },
+            Point { x: 1.0, y: -1.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: 32.0 }
+            Point { x: 0.0, y: 1.0 }
         ],
         [
-            Point { x: -32.0, y: 0.0 },
+            Point { x: -1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: 0.0 },
-            Point { x: 32.0, y: 32.0 }
+            Point { x: 1.0, y: 0.0 },
+            Point { x: 1.0, y: 1.0 }
         ],
         [
-            Point { x: -32.0, y: 32.0 },
-            Point { x: 0.0, y: 32.0 },
+            Point { x: -1.0, y: 1.0 },
+            Point { x: 0.0, y: 1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: -32.0 }
+            Point { x: 0.0, y: -1.0 }
         ]
     ],
     id: 'j'
@@ -192,28 +192,28 @@ pub const J: Piecedef = Piecedef {
 pub const I: Piecedef = Piecedef {
     shape: [
         [
-            Point { x: -32.0, y: -32.0 },
-            Point { x: 0.0, y: -32.0 },
-            Point { x: 32.0, y: -32.0 },
-            Point { x: 64.0, y: -32.0 }
+            Point { x: -1.0, y: -1.0 },
+            Point { x: 0.0, y: -1.0 },
+            Point { x: 1.0, y: -1.0 },
+            Point { x: 2.0, y: -1.0 }
         ],
         [
-            Point { x: 32.0, y: -64.0 },
-            Point { x: 32.0, y: -32.0 },
-            Point { x: 32.0, y: 0.0 },
-            Point { x: 32.0, y: 32.0 },
+            Point { x: 1.0, y: -2.0 },
+            Point { x: 1.0, y: -1.0 },
+            Point { x: 1.0, y: 0.0 },
+            Point { x: 1.0, y: 1.0 },
         ],
         [
-            Point { x: -32.0, y: 0.0 },
+            Point { x: -1.0, y: 0.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 32.0, y: 0.0 },
-            Point { x: 64.0, y: 0.0 }
+            Point { x: 1.0, y: 0.0 },
+            Point { x: 2.0, y: 0.0 }
         ],
         [
-            Point { x: 0.0, y: -64.0 },
-            Point { x: 0.0, y: -32.0 },
+            Point { x: 0.0, y: -2.0 },
+            Point { x: 0.0, y: -1.0 },
             Point { x: 0.0, y: 0.0 },
-            Point { x: 0.0, y: 32.0 },
+            Point { x: 0.0, y: 1.0 },
         ]
     ],
     id: 'i'

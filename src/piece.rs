@@ -23,7 +23,7 @@ impl Piece {
         let piece = piecedefs::PIECES[choice];
         Piece {
             shape: piece.shape,
-            origin: Point { x: 144.0, y: 16.0 },
+            origin: Point { x: 4.5, y: 1.5 },
             orientation: 0,
             id: piece.id,
             color: piecedefs::get_color(piece.id)
@@ -37,8 +37,8 @@ impl Piece {
                 ctx,
                 DrawMode::Fill,
                 graphics::Rect {
-                    x: self.origin.x + cell.x,
-                    y: self.origin.y + cell.y,
+                    x: (self.origin.x + cell.x) * 32.0,
+                    y: (self.origin.y + cell.y) * 32.0,
                     w: 32.0,
                     h: 32.0,
                 }
@@ -52,26 +52,26 @@ impl Piece {
 
     pub fn shift(&mut self, direction: Point) {
         let new_origin = self.origin + direction;
-        if self.can_move(new_origin) {
+        if self.can_move_to(new_origin) {
             self.origin = new_origin;
         }
     }
 
     pub fn hard_drop(&mut self) {
         let mut origin = self.origin;
-        while self.can_move(origin + Point { x: 0.0, y: 32.0 }) {
-            origin = origin + Point { x: 0.0, y: 32.0 };
+        while self.can_move_to(origin + Point { x: 0.0, y: 1.0 }) {
+            origin = origin + Point { x: 0.0, y: 1.0 };
         }
         self.origin = origin;
     }
 
-    fn can_move(&mut self, origin: Point) -> bool {
+    fn can_move_to(&mut self, origin: Point) -> bool {
         for cell in &self.shape[self.orientation] {
             let offset = origin + *cell;
-            if offset.x > 304.0 || offset.x < 16.0 {
+            if offset.x > 10.0 || offset.x < 0.0 {
                 return false;
             }
-            if offset.y > 688.0 {
+            if offset.y > 22.0 {
                 return false;
             }
         }
