@@ -46,7 +46,7 @@ impl Piece {
         }
     }
 
-    pub fn get_pos(&mut self) -> Point {
+    pub fn get_origin(&mut self) -> Point {
         self.origin
     }
 
@@ -58,11 +58,11 @@ impl Piece {
     }
 
     pub fn hard_drop(&mut self) {
-        let mut o = self.origin;
-        while self.can_move(o + Point { x: 0.0, y: 32.0 }) {
-            o = o + Point { x: 0.0, y: 32.0 };
+        let mut origin = self.origin;
+        while self.can_move(origin + Point { x: 0.0, y: 32.0 }) {
+            origin = origin + Point { x: 0.0, y: 32.0 };
         }
-        self.origin = o;
+        self.origin = origin;
     }
 
     fn can_move(&mut self, origin: Point) -> bool {
