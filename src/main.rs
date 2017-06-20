@@ -9,13 +9,16 @@ mod piece;
 mod point;
 mod piecedefs;
 mod inputstate;
+mod matrix;
 
-use piece::*;
+use piece::Piece;
+use matrix::Matrix;
 use point::Point;
 use inputstate::InputState;
 
 struct MainState {
     piece: Piece,
+    matrix: Matrix,
     input: InputState
 }
 
@@ -23,6 +26,7 @@ impl MainState {
     fn new(_ctx: &mut Context) -> GameResult<MainState> {
         let s = MainState {
             piece: Piece::new(),
+            matrix: Matrix::new(),
             input: InputState::new()
         };
         Ok(s)
@@ -34,22 +38,22 @@ impl event::EventHandler for MainState {
         if self.input.down {
             self.input.down_frames += 1;
             if self.input.down_frames % 2 == 0 {
-                self.piece.shift(Point { x: 0, y: 1 })
+                self.piece.shift(&mut self.matrix, Point { x: 0, y: 1 })
             }
         }
         if self.input.das_left > 10 && self.input.left {
-            self.piece.instant_das(Point { x: -1, y: 0 });
+            self.piece.instant_das(&mut self.matrix, Point { x: -1, y: 0 });
         } else if self.input.left {
             if self.input.das_left == 0 {
-                self.piece.shift(Point { x: -1, y: 0 });
+                self.piece.shift(&mut self.matrix, Point { x: -1, y: 0 });
             }
             self.input.das_left += 1;
         }
         if self.input.das_right > 10 && self.input.right {
-            self.piece.instant_das(Point { x: 1, y: 0 });
+            self.piece.instant_das(&mut self.matrix, Point { x: 1, y: 0 });
         } else if self.input.right {
             if self.input.das_right == 0 {
-                self.piece.shift(Point { x: 1, y: 0 });
+                self.piece.shift(&mut self.matrix, Point { x: 1, y: 0 });
             }
             self.input.das_right += 1;
         }
@@ -58,6 +62,7 @@ impl event::EventHandler for MainState {
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
         graphics::clear(ctx);
+        self.matrix.draw(ctx);
         self.piece.draw(ctx);
         graphics::present(ctx);
         Ok(())
@@ -69,7 +74,7 @@ impl event::EventHandler for MainState {
         }
         match keycode {
             event::Keycode::Down => self.input.down = true,
-            event::Keycode::Space => self.piece.hard_drop(),
+            event::Keycode::Space => self.piece.hard_drop(&mut self.matrix),
             event::Keycode::Left => {
                 self.input.right = false;
                 self.input.left = true;
