@@ -37,16 +37,16 @@ impl event::EventHandler for MainState {
                 self.piece.shift(Point { x: 0, y: 1 })
             }
         }
-        if self.input.das_left > 16 && self.input.left {
-            self.piece.shift(Point { x: -1, y: 0 });
+        if self.input.das_left > 10 && self.input.left {
+            self.piece.instant_das(Point { x: -1, y: 0 });
         } else if self.input.left {
             if self.input.das_left == 0 {
                 self.piece.shift(Point { x: -1, y: 0 });
             }
             self.input.das_left += 1;
         }
-        if self.input.das_right > 16 && self.input.right {
-            self.piece.shift(Point { x: 1, y: 0 });
+        if self.input.das_right > 10 && self.input.right {
+            self.piece.instant_das(Point { x: 1, y: 0 });
         } else if self.input.right {
             if self.input.das_right == 0 {
                 self.piece.shift(Point { x: 1, y: 0 });

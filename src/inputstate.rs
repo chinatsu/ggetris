@@ -1,3 +1,5 @@
+/// A state machine to keep track of inputs and
+/// some information determining the piece's movements
 pub struct InputState {
     pub das_right: u64,
     pub das_left: u64,

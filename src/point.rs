@@ -1,6 +1,7 @@
 use std::ops;
 
 
+/// A simple point struct to use for matrix cells and such
 #[derive(Clone, Copy)]
 pub struct Point {
     pub x: isize,
@@ -16,6 +17,7 @@ impl Point {
     }
  }
 
+/// Functionality to directly add and subtract Points
 impl ops::Add<Point> for Point {
     type Output = Point;
     fn add(self, _rhs: Point) -> Point {

@@ -1,8 +1,16 @@
+//! Piece definitions for each of the pieces
+
 extern crate ggez;
 use rand::distributions::Weighted;
 use ggez::graphics::Color;
 use point::*;
 
+/// A Piecedef struct only contains its shapes and an ID
+/// used to determine color. The ID is a char for the purpose
+/// of clearing up which piece is which as they all are commonly
+/// referred to as a single letter.
+/// The shapes are defined as offset points from an origin, and
+/// is stored in a list with its other rotation states
 #[derive(Clone, Copy)]
 pub struct Piecedef {
     pub shape: [[Point; 4]; 4],
@@ -221,6 +229,8 @@ pub const I: Piecedef = Piecedef {
 
 pub const PIECES: [Piecedef; 7] = [T, L, O, S, Z, J, I];
 
+/// The randomizer's weights are defined here.
+/// TODO: Replace randomizer with a bag-randomizer
 pub const WEIGHTS: [Weighted<usize>; 7] = [
     Weighted { weight: 100, item: 0 },
     Weighted { weight: 100, item: 1 },
@@ -231,6 +241,7 @@ pub const WEIGHTS: [Weighted<usize>; 7] = [
     Weighted { weight: 100, item: 6 },
 ];
 
+/// A utility function to get a piece's color based on its ID.
 pub fn get_color(id: char) -> Color {
     match id {
         't' => Color::new(0.8, 0.0, 1.0, 1.0),
