@@ -82,8 +82,8 @@ pub const O: Piecedef = Piecedef {
         [
             Point { x: 0, y: -1 },
             Point { x: 0, y: 0 },
-            Point { x: 1, y: -1 },
-            Point { x: 1, y: 0 }
+            Point { x: -1, y: -1 },
+            Point { x: -1, y: 0 }
         ],
         [
             Point { x: 0, y: -1 },
@@ -92,16 +92,16 @@ pub const O: Piecedef = Piecedef {
             Point { x: 1, y: 0 }
         ],
         [
-            Point { x: 0, y: -1 },
+            Point { x: 0, y: 1 },
             Point { x: 0, y: 0 },
-            Point { x: 1, y: -1 },
+            Point { x: 1, y: 1 },
             Point { x: 1, y: 0 }
         ],
         [
-            Point { x: 0, y: -1 },
+            Point { x: 0, y: 1 },
             Point { x: 0, y: 0 },
-            Point { x: 1, y: -1 },
-            Point { x: 1, y: 0 }
+            Point { x: -1, y: 1 },
+            Point { x: -1, y: 0 }
         ]
     ],
     id: 'o'

@@ -5,7 +5,7 @@ use ggez::*;
 use rand::distributions::{WeightedChoice, IndependentSample};
 use point::Point;
 use piecedefs;
-use matrix::Matrix;
+use matrix::*;
 
 
 /// Piece struct for storing all the data of a Tetris piece
@@ -57,7 +57,8 @@ impl Piece {
     /// Moves the piece towards the direction provided
     pub fn shift(&mut self, m: &mut Matrix, direction: Point) {
         let new_origin = self.origin + direction;
-        if self.can_move_to(m, new_origin) {
+        let orientation = self.orientation;
+        if self.valid_position(m, orientation, new_origin) {
             self.origin = new_origin;
         }
     }
@@ -84,6 +85,8 @@ impl Piece {
         let piece = piecedefs::PIECES[choice];
         self.shape = piece.shape;
         self.id = piece.id;
+        self.color = piecedefs::get_color(piece.id);
+        println!("{}", self.id);
         self.origin = Point { x: 5, y: 2 };
         self.orientation = 0;
     }
@@ -101,7 +104,8 @@ impl Piece {
     /// repeat rate set to "infinite"
     pub fn instant_das(&mut self, m: &mut Matrix, direction: Point) {
         let mut origin = self.origin;
-        while self.can_move_to(m, origin + direction) {
+        let orientation = self.orientation;
+        while self.valid_position(m, orientation, origin + direction) {
             origin = origin +  direction;
         }
         self.origin = origin;
@@ -109,13 +113,13 @@ impl Piece {
 
     /// A checking function to see if the piece can move to
     /// the absolute position provided in origin
-    fn can_move_to(&mut self, m: &mut Matrix, origin: Point) -> bool {
-        for cell in &self.shape[self.orientation] {
+    fn valid_position(&mut self, m: &mut Matrix, orientation: usize, origin: Point) -> bool {
+        for cell in &self.shape[orientation] {
             let offset = origin + *cell;
-            if offset.x > 10 || offset.x <= 0 {
+            if offset.x > WIDTH as isize || offset.x <= 0 {
                 return false;
             }
-            if offset.y > 22 {
+            if offset.y > HEIGHT as isize || offset.y <= 0 {
                 return false;
             }
             if m.state[offset.y as usize - 1][offset.x as usize - 1] != '0' {
@@ -125,8 +129,37 @@ impl Piece {
         true
     }
 
-    /// Rotates the piece to the new orientation
-    pub fn rotate(&mut self, new: usize) {
-        self.orientation = (self.orientation + new) % 4;
+    /// Rotates the piece to the new orientation.
+    /// If the new rotation is blocked by the stack or a wall, we
+    /// check an area around the position and place the piece
+    /// at the first available spot
+    pub fn rotate(&mut self, m: &mut Matrix, new: usize) {
+        let new_orientation = (self.orientation + new) % 4;
+        let mut new_origin = self.origin;
+        if self.valid_position(m, new_orientation, new_origin) {
+            self.orientation = new_orientation;
+            self.origin = new_origin;
+            return;
+        }
+        let rotate_checks: [Point; 10] = [
+            Point{x: -1, y: 0},
+            Point{x: 1, y: 0},
+            Point{x: 0, y: 1},
+            Point{x: 1, y: 1},
+            Point{x: -1, y: 1},
+            Point{x: -2, y: 0},
+            Point{x: 2, y: 0},
+            Point{x: 0, y: -1},
+            Point{x: -1, y: -1},
+            Point{x: 1, y: -1}
+        ];
+        for check in rotate_checks.iter() {
+            new_origin = self.origin + check.clone();
+            if self.valid_position(m, new_orientation, new_origin) {
+                self.orientation = new_orientation;
+                self.origin = new_origin;
+                return;
+            }
+        }
     }
 }

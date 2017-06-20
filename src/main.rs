@@ -83,9 +83,9 @@ impl event::EventHandler for MainState {
                 self.input.left = false;
                 self.input.right = true;
             },
-            event::Keycode::Z => self.piece.rotate(3),
-            event::Keycode::X => self.piece.rotate(1),
-            event::Keycode::C => self.piece.rotate(2),
+            event::Keycode::Z => self.piece.rotate(&mut self.matrix, 3),
+            event::Keycode::X => self.piece.rotate(&mut self.matrix, 1),
+            event::Keycode::C => self.piece.rotate(&mut self.matrix, 2),
             _ => { }
         }
     }
