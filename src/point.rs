@@ -3,12 +3,12 @@ use std::ops;
 
 #[derive(Clone, Copy)]
 pub struct Point {
-    pub x: f32,
-    pub y: f32
+    pub x: isize,
+    pub y: isize
 }
 
 impl Point {
-    pub fn new(x: f32, y: f32) -> Point {
+    pub fn new(x: isize, y: isize) -> Point {
         Point {
             x: x,
             y: y,

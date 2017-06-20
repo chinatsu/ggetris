@@ -23,7 +23,7 @@ impl Piece {
         let piece = piecedefs::PIECES[choice];
         Piece {
             shape: piece.shape,
-            origin: Point { x: 4.5, y: 1.5 },
+            origin: Point { x: 5, y: 2 },
             orientation: 0,
             id: piece.id,
             color: piecedefs::get_color(piece.id)
@@ -37,8 +37,8 @@ impl Piece {
                 ctx,
                 DrawMode::Fill,
                 graphics::Rect {
-                    x: (self.origin.x + cell.x) * 32.0,
-                    y: (self.origin.y + cell.y) * 32.0,
+                    x: (self.origin.x + cell.x) as f32 * 32.0 - 16.0,
+                    y: (self.origin.y + cell.y) as f32 * 32.0 - 16.0,
                     w: 32.0,
                     h: 32.0,
                 }
@@ -59,8 +59,8 @@ impl Piece {
 
     pub fn hard_drop(&mut self) {
         let mut origin = self.origin;
-        while self.can_move_to(origin + Point { x: 0.0, y: 1.0 }) {
-            origin = origin + Point { x: 0.0, y: 1.0 };
+        while self.can_move_to(origin + Point { x: 0, y: 1 }) {
+            origin = origin + Point { x: 0, y: 1 };
         }
         self.origin = origin;
     }
@@ -68,10 +68,10 @@ impl Piece {
     fn can_move_to(&mut self, origin: Point) -> bool {
         for cell in &self.shape[self.orientation] {
             let offset = origin + *cell;
-            if offset.x > 10.0 || offset.x < 0.0 {
+            if offset.x > 10 || offset.x <= 0 {
                 return false;
             }
-            if offset.y > 22.0 {
+            if offset.y > 22 {
                 return false;
             }
         }
