@@ -52,10 +52,10 @@ impl Matrix {
                         ctx,
                         DrawMode::Fill,
                         graphics::Rect {
-                            x: (1 + x) as f32 * 32.0 - 16.0,
-                            y: (1 + y) as f32 * 32.0 - 16.0,
-                            w: 32.0,
-                            h: 32.0,
+                            x: (1 + x) as f32 - 0.5,
+                            y: (1 + y) as f32 - 0.5,
+                            w: 1.0,
+                            h: 1.0,
                         }
                     );
                 }

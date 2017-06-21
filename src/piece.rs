@@ -41,14 +41,35 @@ impl Piece {
                 ctx,
                 DrawMode::Fill,
                 graphics::Rect {
-                    x: (self.origin.x + cell.x) as f32 * 32.0 - 16.0,
-                    y: (self.origin.y + cell.y) as f32 * 32.0 - 16.0,
-                    w: 32.0,
-                    h: 32.0,
+                    x: (self.origin.x + cell.x) as f32 - 0.5,
+                    y: (self.origin.y + cell.y) as f32 - 0.5,
+                    w: 1.0,
+                    h: 1.0,
                 }
             );
         }
     }
+
+    pub fn draw_ghost(&mut self, m: &mut Matrix, ctx: &mut Context) {
+        let color = Color::new(1.0, 1.0, 1.0, 0.5);
+        let real_origin = self.origin;
+        self.instant_das(m, Point { x: 0, y: 1 });
+        let _ = graphics::set_color(ctx, color);
+        for cell in self.shape[self.orientation].iter() {
+            graphics::rectangle(
+                ctx,
+                DrawMode::Fill,
+                graphics::Rect {
+                    x: (self.origin.x + cell.x) as f32 - 0.5,
+                    y: (self.origin.y + cell.y) as f32 - 0.5,
+                    w: 1.0,
+                    h: 1.0,
+                }
+            );
+        }
+        self.origin = real_origin;
+    }
+
     /// Returns the piece's origin
     pub fn get_origin(&mut self) -> Point {
         self.origin
@@ -86,7 +107,6 @@ impl Piece {
         self.shape = piece.shape;
         self.id = piece.id;
         self.color = piecedefs::get_color(piece.id);
-        println!("{}", self.id);
         self.origin = Point { x: 5, y: 2 };
         self.orientation = 0;
     }

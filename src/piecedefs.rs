@@ -232,13 +232,13 @@ pub const PIECES: [Piecedef; 7] = [T, L, O, S, Z, J, I];
 /// The randomizer's weights are defined here.
 /// TODO: Replace randomizer with a bag-randomizer
 pub const WEIGHTS: [Weighted<usize>; 7] = [
-    Weighted { weight: 100, item: 0 },
-    Weighted { weight: 100, item: 1 },
-    Weighted { weight: 100, item: 2 },
-    Weighted { weight: 100, item: 3 },
-    Weighted { weight: 100, item: 4 },
-    Weighted { weight: 100, item: 5 },
-    Weighted { weight: 100, item: 6 },
+    Weighted { weight: 1, item: 0 },
+    Weighted { weight: 1, item: 1 },
+    Weighted { weight: 1, item: 2 },
+    Weighted { weight: 1, item: 3 },
+    Weighted { weight: 1, item: 4 },
+    Weighted { weight: 1, item: 5 },
+    Weighted { weight: 1, item: 6 },
 ];
 
 /// A utility function to get a piece's color based on its ID.
