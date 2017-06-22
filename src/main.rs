@@ -39,7 +39,6 @@ impl MainState {
 
 impl event::EventHandler for MainState {
     fn update(&mut self, _ctx: &mut Context, _dt: Duration) -> GameResult<()> {
-        print!("{} FPS          \r", timer::get_fps(_ctx));
         if self.input.down {
             self.input.down_frames += 1;
             if self.input.down_frames % 1 == 0 {
@@ -132,6 +131,7 @@ pub fn main() {
     let mut c = conf::Conf::new();
     c.window_height = 704 as u32;
     c.window_width = 320 as u32;
+    c.vsync = true;
     let ctx = &mut Context::load_from_conf("ggetris", "cn", c).unwrap();
     let bg = Color::new(0.0, 0.0, 0.0, 1.0);
     graphics::set_screen_coordinates(ctx, 0.0, 10.0, 0.0, 22.0);

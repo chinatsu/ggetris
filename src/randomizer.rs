@@ -30,5 +30,9 @@ fn new_bag() -> Vec<Piecedef> {
     let mut rng = thread_rng();
     let mut bag = vec!(T, L, O, S, Z, J, I);
     rng.shuffle(&mut bag.as_mut_slice());
+    while [S.id, Z.id, O.id].contains(&bag[0].id) {
+        // TGM Ace randomizer, for whatever reason
+        rng.shuffle(&mut bag.as_mut_slice());
+    }
     bag
 }
