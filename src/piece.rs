@@ -1,11 +1,10 @@
 extern crate ggez;
-extern crate rand;
 use ggez::graphics::{DrawMode, Color};
 use ggez::*;
-use rand::distributions::{WeightedChoice, IndependentSample};
 use point::Point;
 use piecedefs;
 use matrix::*;
+use randomizer::Randomizer;
 
 
 /// Piece struct for storing all the data of a Tetris piece
@@ -15,22 +14,21 @@ pub struct Piece {
     pub orientation: usize,
     pub id: char,
     pub color: Color,
+    pub randomizer: Randomizer,
 }
 
 impl Piece {
     /// Creates a new random piece
     pub fn new() -> Piece {
-        let mut weights = &mut piecedefs::WEIGHTS;
-        let wc = WeightedChoice::new(weights);
-        let mut rng = rand::thread_rng();
-        let choice = wc.ind_sample(&mut rng);
-        let piece = piecedefs::PIECES[choice];
+        let mut randomizer = Randomizer::new();
+        let piece = randomizer.next_piece();
         Piece {
             shape: piece.shape,
             origin: Point { x: 5, y: 2 },
             orientation: 0,
             id: piece.id,
-            color: piecedefs::get_color(piece.id)
+            color: piecedefs::get_color(piece.id),
+            randomizer: randomizer
         }
     }
     /// Draws the piece onto the provided context
@@ -99,11 +97,7 @@ impl Piece {
     /// Change the shape into a random new one, and reset its
     /// origin and orientation.
     pub fn spawn_piece(&mut self) {
-        let mut weights = &mut piecedefs::WEIGHTS;
-        let wc = WeightedChoice::new(weights);
-        let mut rng = rand::thread_rng();
-        let choice = wc.ind_sample(&mut rng);
-        let piece = piecedefs::PIECES[choice];
+        let piece = self.randomizer.next_piece();
         self.shape = piece.shape;
         self.id = piece.id;
         self.color = piecedefs::get_color(piece.id);

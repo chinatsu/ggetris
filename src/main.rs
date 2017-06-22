@@ -1,7 +1,7 @@
 extern crate ggez;
 extern crate rand;
 use ggez::*;
-use ggez::graphics::{DrawMode, Color};
+use ggez::graphics::Color;
 use std::time::Duration;
 
 
@@ -10,6 +10,7 @@ mod point;
 mod piecedefs;
 mod inputstate;
 mod matrix;
+mod randomizer;
 
 use piece::Piece;
 use matrix::Matrix;

@@ -2,7 +2,7 @@ use std::ops;
 
 
 /// A simple point struct to use for matrix cells and such
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Point {
     pub x: isize,
     pub y: isize

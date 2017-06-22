@@ -1,8 +1,7 @@
 extern crate ggez;
-use ggez::graphics::{DrawMode, Color};
+use ggez::graphics::DrawMode;
 use ggez::*;
 use piecedefs;
-use point::Point;
 
 pub const WIDTH: usize = 10;
 pub const HEIGHT: usize = 22;
