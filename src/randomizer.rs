@@ -27,12 +27,21 @@ impl Randomizer {
 
 /// Creates a new permutated bag
 fn new_bag() -> Vec<Piecedef> {
+    let mut bag = vec!(T, L, I, J, S, Z, O);
     let mut rng = thread_rng();
-    let mut bag = vec!(T, L, O, S, Z, J, I);
-    rng.shuffle(&mut bag.as_mut_slice());
-    while [S.id, Z.id, O.id].contains(&bag[0].id) {
-        // TGM Ace randomizer, for whatever reason
-        rng.shuffle(&mut bag.as_mut_slice());
+    let num: usize = rng.gen_range(0, 4);
+    let mut tail = vec!(bag[num]);
+    for i in 0..bag.len() as usize {
+        if bag[i].id == tail[0].id {
+            bag.remove(i);
+            break;
+        }
     }
+    rng.shuffle(&mut bag.as_mut_slice());
+    bag.append(&mut tail);
+    for x in bag.iter().rev() {
+        print!("{} ", x.id);
+    }
+    println!();
     bag
 }
