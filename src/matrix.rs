@@ -1,5 +1,5 @@
 extern crate ggez;
-use ggez::graphics::DrawMode;
+use ggez::graphics::{DrawMode,Color};
 use ggez::*;
 use piecedefs;
 
@@ -42,11 +42,15 @@ impl Matrix {
     }
 
     pub fn draw(&mut self, ctx: &mut Context) {
+        let mut color = Color::new(0.0, 0.0, 0.0, 0.0);
         for y in 0..self.state.len() {
             for x in 0..self.state[y].len() {
                 if self.state[y][x] != '0' {
-                    let color = piecedefs::get_color(self.state[y][x]);
-                    let _ = graphics::set_color(ctx, color);
+                    color = piecedefs::get_color(self.state[y][x]);
+                    if graphics::get_color(ctx) != color {
+                        // try to reduce the amount of set_color calls i guess
+                        let _ = graphics::set_color(ctx, color);
+                    }
                     graphics::rectangle(
                         ctx,
                         DrawMode::Fill,

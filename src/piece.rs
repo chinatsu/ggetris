@@ -1,4 +1,5 @@
 extern crate ggez;
+extern crate flame;
 use ggez::graphics::{DrawMode, Color};
 use ggez::*;
 use point::Point;

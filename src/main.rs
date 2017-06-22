@@ -1,8 +1,11 @@
 extern crate ggez;
 extern crate rand;
+//extern crate flame;
 use ggez::*;
 use ggez::graphics::Color;
 use std::time::Duration;
+//use std::fs::File;
+
 
 
 mod piece;
@@ -36,6 +39,7 @@ impl MainState {
 
 impl event::EventHandler for MainState {
     fn update(&mut self, _ctx: &mut Context, _dt: Duration) -> GameResult<()> {
+        print!("{} FPS          \r", timer::get_fps(_ctx));
         if self.input.down {
             self.input.down_frames += 1;
             if self.input.down_frames % 1 == 0 {
@@ -65,9 +69,15 @@ impl event::EventHandler for MainState {
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
         graphics::clear(ctx);
+        //flame::start("draw matrix");
         self.matrix.draw(ctx);
+        //flame::end("draw matrix");
+        //flame::start("draw ghost");
         self.piece.draw_ghost(&mut self.matrix, ctx);
+        //flame::end("draw ghost");
+        //flame::start("draw piece");
         self.piece.draw(ctx);
+        //flame::end("draw piece");
         graphics::present(ctx);
         Ok(())
     }
@@ -128,4 +138,5 @@ pub fn main() {
     graphics::set_background_color(ctx, bg);
     let state = &mut MainState::new(ctx).unwrap();
     event::run(ctx, state).unwrap();
+    //flame::dump_html(&mut File::create("flame-graph.html").unwrap()).unwrap();
 }
