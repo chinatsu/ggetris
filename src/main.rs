@@ -39,13 +39,14 @@ impl MainState {
 
 impl event::EventHandler for MainState {
     fn update(&mut self, _ctx: &mut Context, _dt: Duration) -> GameResult<()> {
+        print!("{:.2} FPS        \r", timer::get_fps(_ctx));
         if self.input.down {
             self.input.down_frames += 1;
             if self.input.down_frames % 1 == 0 {
                 self.piece.shift(&mut self.matrix, Point { x: 0, y: 1 })
             }
         }
-        if self.input.das > 7 && self.input.left {
+        if self.input.das > 8 && self.input.left {
             self.piece.instant_das(&mut self.matrix, Point { x: -1, y: 0 });
             self.input.das += 1;
         } else if self.input.left {
@@ -54,7 +55,7 @@ impl event::EventHandler for MainState {
             }
             self.input.das += 1;
         }
-        if self.input.das > 7 && self.input.right {
+        if self.input.das > 8 && self.input.right {
             self.piece.instant_das(&mut self.matrix, Point { x: 1, y: 0 });
             self.input.das += 1;
         } else if self.input.right {
@@ -63,6 +64,7 @@ impl event::EventHandler for MainState {
             }
             self.input.das += 1;
         }
+        //timer::sleep_until_next_frame(_ctx, 120);
         Ok(())
     }
 
@@ -70,9 +72,12 @@ impl event::EventHandler for MainState {
         graphics::clear(ctx);
         //flame::start("draw matrix");
         self.matrix.draw(ctx);
+
+        graphics::line(ctx, &[graphics::Point{x: 10.0, y: 0.0}, graphics::Point{x: 10.0, y: 22.0}]);
         //flame::end("draw matrix");
         //flame::start("draw ghost");
         self.piece.draw_ghost(&mut self.matrix, ctx);
+        self.piece.draw_next(ctx);
         //flame::end("draw ghost");
         //flame::start("draw piece");
         self.piece.draw(ctx);
@@ -129,13 +134,14 @@ impl event::EventHandler for MainState {
 
 pub fn main() {
     let mut c = conf::Conf::new();
-    c.window_height = 704 as u32;
-    c.window_width = 320 as u32;
-    c.vsync = true;
+    c.window_height = 22 * 32 as u32;
+    c.window_width = 16 * 32 as u32;
+    //c.vsync = false;
     let ctx = &mut Context::load_from_conf("ggetris", "cn", c).unwrap();
     let bg = Color::new(0.0, 0.0, 0.0, 1.0);
-    graphics::set_screen_coordinates(ctx, 0.0, 10.0, 0.0, 22.0);
+    graphics::set_screen_coordinates(ctx, 0.0, 16.0, 0.0, 22.0);
     graphics::set_background_color(ctx, bg);
+    graphics::set_line_width(ctx, 0.032);
     let state = &mut MainState::new(ctx).unwrap();
     event::run(ctx, state).unwrap();
     //flame::dump_html(&mut File::create("flame-graph.html").unwrap()).unwrap();

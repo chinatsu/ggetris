@@ -10,6 +10,7 @@ use randomizer::Randomizer;
 /// Piece struct for storing all the data of a Tetris piece
 pub struct Piece {
     pub shape: [[Point; 4]; 4],
+    pub next_shape: piecedefs::Piecedef,
     pub origin: Point,
     pub orientation: usize,
     pub id: char,
@@ -22,8 +23,10 @@ impl Piece {
     pub fn new() -> Piece {
         let mut randomizer = Randomizer::new();
         let piece = randomizer.next_piece();
+        let next_piece = randomizer.next_piece();
         Piece {
             shape: piece.shape,
+            next_shape: next_piece,
             origin: Point { x: 5, y: 2 },
             orientation: 0,
             id: piece.id,
@@ -41,6 +44,23 @@ impl Piece {
                 graphics::Rect {
                     x: (self.origin.x + cell.x) as f32 - 0.5,
                     y: (self.origin.y + cell.y) as f32 - 0.5,
+                    w: 1.0,
+                    h: 1.0,
+                }
+            );
+        }
+    }
+
+    /// Draws the piece onto the provided context
+    pub fn draw_next(&mut self, ctx: &mut Context) {
+        let _ = graphics::set_color(ctx, piecedefs::get_color(self.next_shape.id));
+        for cell in &self.next_shape.shape[0] {
+            graphics::rectangle(
+                ctx,
+                DrawMode::Fill,
+                graphics::Rect {
+                    x: cell.x as f32 + 12.5,
+                    y: cell.y as f32 + 2.0,
                     w: 1.0,
                     h: 1.0,
                 }
@@ -91,16 +111,27 @@ impl Piece {
             m.state[y as usize][x as usize] = self.id;
         }
         m.clear_lines();
-        self.spawn_piece();
+        self.spawn_piece(m);
     }
 
     /// Change the shape into a random new one, and reset its
     /// origin and orientation.
-    pub fn spawn_piece(&mut self) {
-        let piece = self.randomizer.next_piece();
-        self.shape = piece.shape;
-        self.id = piece.id;
-        self.color = piecedefs::get_color(piece.id);
+    pub fn spawn_piece(&mut self, m: &mut Matrix) {
+        let shape = self.next_shape.shape;
+        let id = self.next_shape.id;
+        let next_shape = self.randomizer.next_piece();
+        for cell in &shape[0] {
+            let x = 5 + cell.x;
+            let y = 2 + cell.y;
+            if m.state[y as usize][x as usize] != '0' {
+                panic!("Game over!");
+
+            }
+        }
+        self.shape = shape;
+        self.id = id;
+        self.next_shape = next_shape;
+        self.color = piecedefs::get_color(id);
         self.origin = Point { x: 5, y: 2 };
         self.orientation = 0;
     }
