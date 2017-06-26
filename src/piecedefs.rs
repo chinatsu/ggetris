@@ -16,6 +16,12 @@ pub struct Piecedef {
     pub id: char
 }
 
+impl PartialEq for Piecedef {
+    fn eq(&self, other: &Piecedef) -> bool {
+        self.id == other.id
+    }
+}
+
 pub const T: Piecedef = Piecedef {
     shape: [
         [

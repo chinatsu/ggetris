@@ -39,7 +39,7 @@ impl MainState {
 
 impl event::EventHandler for MainState {
     fn update(&mut self, _ctx: &mut Context, _dt: Duration) -> GameResult<()> {
-        print!("{:.2} FPS        \r", timer::get_fps(_ctx));
+        //print!("{:.2} FPS        \r", timer::get_fps(_ctx));
         if self.input.down {
             self.input.down_frames += 1;
             if self.input.down_frames % 1 == 0 {
