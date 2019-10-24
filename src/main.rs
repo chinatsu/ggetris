@@ -38,7 +38,7 @@ impl MainState {
 }
 
 impl event::EventHandler for MainState {
-    fn update(&mut self, _ctx: &mut Context, _dt: Duration) -> GameResult<()> {
+    fn update(&mut self, _ctx: &mut Context) -> GameResult<()> {
         //print!("{:.2} FPS        \r", timer::get_fps(_ctx));
         if self.input.down {
             self.input.down_frames += 1;
@@ -73,7 +73,7 @@ impl event::EventHandler for MainState {
         //flame::start("draw matrix");
         self.matrix.draw(ctx);
 
-        graphics::line(ctx, &[graphics::Point{x: 10.0, y: 0.0}, graphics::Point{x: 10.0, y: 22.0}]);
+        graphics::line(ctx, &[graphics::Point2::new(10.0, 0.0), graphics::Point2::new(10.0, 22.0)], 0.032);
         //flame::end("draw matrix");
         //flame::start("draw ghost");
         self.piece.draw_ghost(&mut self.matrix, ctx);
@@ -86,7 +86,7 @@ impl event::EventHandler for MainState {
         Ok(())
     }
 
-    fn key_down_event(&mut self, keycode: event::Keycode, _: event::Mod, repeat: bool) {
+    fn key_down_event(&mut self, _: &mut Context, keycode: event::Keycode, _: event::Mod, repeat: bool) {
         if repeat == true {
             return;
         }
@@ -110,7 +110,7 @@ impl event::EventHandler for MainState {
         }
     }
 
-    fn key_up_event(&mut self, keycode: event::Keycode, _: event::Mod, repeat: bool) {
+    fn key_up_event(&mut self, _: &mut Context, keycode: event::Keycode, _: event::Mod, repeat: bool) {
         if repeat == true {
             return;
         }
@@ -134,14 +134,13 @@ impl event::EventHandler for MainState {
 
 pub fn main() {
     let mut c = conf::Conf::new();
-    c.window_height = 22 * 32 as u32;
-    c.window_width = 16 * 32 as u32;
+    c.window_mode.height = 22 * 32 as u32;
+    c.window_mode.width = 16 * 32 as u32;
     //c.vsync = false;
     let ctx = &mut Context::load_from_conf("ggetris", "cn", c).unwrap();
     let bg = Color::new(0.0, 0.0, 0.0, 1.0);
-    graphics::set_screen_coordinates(ctx, 0.0, 16.0, 0.0, 22.0);
+    graphics::set_screen_coordinates(ctx, graphics::Rect::new(0.0, 0.0, 16.0, 22.0));
     graphics::set_background_color(ctx, bg);
-    graphics::set_line_width(ctx, 0.032);
     let state = &mut MainState::new(ctx).unwrap();
     event::run(ctx, state).unwrap();
     //flame::dump_html(&mut File::create("flame-graph.html").unwrap()).unwrap();
