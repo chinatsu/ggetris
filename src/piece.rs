@@ -35,62 +35,64 @@ impl Piece {
         }
     }
     /// Draws the piece onto the provided context
-    pub fn draw(&mut self, ctx: &mut Context) {
-        let _ = graphics::set_color(ctx, self.color);
+    pub fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
         for cell in &self.shape[self.orientation] {
-            graphics::rectangle(
+            let rect = graphics::Mesh::new_rectangle(
                 ctx,
-                DrawMode::Fill,
+                DrawMode::fill(),
                 graphics::Rect {
                     x: (self.origin.x + cell.x) as f32 - 0.5,
                     y: (self.origin.y + cell.y) as f32 - 0.5,
                     w: 1.0,
                     h: 1.0,
-                }
-            );
+                },
+                self.color
+            )?;
+
+            graphics::draw(ctx, &rect, (ggez::mint::Point2 { x: 0.0, y: 0.0 },))?;
         }
+        Ok(())
     }
 
     /// Draws the piece onto the provided context
-    pub fn draw_next(&mut self, ctx: &mut Context) {
-        let _ = graphics::set_color(ctx, piecedefs::get_color(self.next_shape.id));
+    pub fn draw_next(&mut self, ctx: &mut Context) -> GameResult<()> {
         for cell in &self.next_shape.shape[0] {
-            graphics::rectangle(
+            let rect = graphics::Mesh::new_rectangle(
                 ctx,
-                DrawMode::Fill,
+                DrawMode::fill(),
                 graphics::Rect {
                     x: cell.x as f32 + 12.5,
                     y: cell.y as f32 + 2.0,
                     w: 1.0,
                     h: 1.0,
-                }
-            );
+                },
+                piecedefs::get_color(self.next_shape.id)
+            )?;
+            graphics::draw(ctx, &rect, (ggez::mint::Point2 { x: 0.0, y: 0.0 },))?;
         }
+        Ok(())
     }
 
-    pub fn draw_ghost(&mut self, m: &mut Matrix, ctx: &mut Context) {
+    pub fn draw_ghost(&mut self, m: &mut Matrix, ctx: &mut Context) -> GameResult<()> {
         let color = Color::new(1.0, 1.0, 1.0, 0.5);
         let real_origin = self.origin;
         self.instant_das(m, Point { x: 0, y: 1 });
-        let _ = graphics::set_color(ctx, color);
         for cell in self.shape[self.orientation].iter() {
-            graphics::rectangle(
+            let rect = graphics::Mesh::new_rectangle(
                 ctx,
-                DrawMode::Fill,
+                DrawMode::fill(),
                 graphics::Rect {
                     x: (self.origin.x + cell.x) as f32 - 0.5,
                     y: (self.origin.y + cell.y) as f32 - 0.5,
                     w: 1.0,
                     h: 1.0,
-                }
-            );
+                },
+                color
+            )?;
+            graphics::draw(ctx, &rect, (ggez::mint::Point2 { x: 0.0, y: 0.0 },))?;
         }
         self.origin = real_origin;
-    }
-
-    /// Returns the piece's origin
-    pub fn get_origin(&mut self) -> Point {
-        self.origin
+        Ok(())
     }
 
     /// Moves the piece towards the direction provided

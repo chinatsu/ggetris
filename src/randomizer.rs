@@ -1,7 +1,7 @@
 /// A rudimentary bag-randomizer for Tetris
 
 extern crate rand;
-use rand::{thread_rng, Rng};
+use rand::{thread_rng, seq::SliceRandom};
 use piecedefs::*;
 use std::collections::VecDeque;
 
@@ -24,10 +24,10 @@ impl Randomizer {
     pub fn next_piece(&mut self) -> Piecedef {
         let mut choices = vec!(S, Z, O, T, L, I, J);
         let mut rng = thread_rng();
-        rng.shuffle(&mut choices.as_mut_slice());
+        choices.shuffle(&mut rng);
         for _ in 0..3 {
             if self.history.contains(&choices[6]) {
-                rng.shuffle(&mut choices.as_mut_slice())
+                choices.shuffle(&mut rng)
             }
         }
         let piece = choices.pop().unwrap();

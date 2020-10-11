@@ -1,5 +1,5 @@
-window_title = "An easy, good game"
+window_title = "ggetris"
 window_icon = ""
-window_height = 600
-window_width = 800
+window_height = 704
+window_width = 512
 vsync = true

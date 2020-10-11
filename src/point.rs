@@ -8,15 +8,6 @@ pub struct Point {
     pub y: isize
 }
 
-impl Point {
-    pub fn new(x: isize, y: isize) -> Point {
-        Point {
-            x: x,
-            y: y,
-        }
-    }
- }
-
 /// Functionality to directly add and subtract Points
 impl ops::Add<Point> for Point {
     type Output = Point;

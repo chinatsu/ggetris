@@ -1,10 +1,6 @@
 extern crate ggez;
 extern crate rand;
-//extern crate flame;
 use ggez::*;
-use ggez::graphics::Color;
-use std::time::Duration;
-//use std::fs::File;
 
 
 
@@ -69,61 +65,53 @@ impl event::EventHandler for MainState {
     }
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
-        graphics::clear(ctx);
-        //flame::start("draw matrix");
-        self.matrix.draw(ctx);
+        graphics::clear(ctx, graphics::BLACK);
 
-        graphics::line(ctx, &[graphics::Point2::new(10.0, 0.0), graphics::Point2::new(10.0, 22.0)], 0.032);
-        //flame::end("draw matrix");
-        //flame::start("draw ghost");
-        self.piece.draw_ghost(&mut self.matrix, ctx);
-        self.piece.draw_next(ctx);
-        //flame::end("draw ghost");
-        //flame::start("draw piece");
-        self.piece.draw(ctx);
-        //flame::end("draw piece");
-        graphics::present(ctx);
+        self.matrix.draw(ctx)?;
+        let line = graphics::Mesh::new_line(ctx, &[mint::Point2{x: 10.5, y: 0.0}, mint::Point2{x: 10.5, y: 22.5}], 0.032, graphics::WHITE)?;
+        graphics::draw(ctx, &line, (ggez::mint::Point2 { x: 0.0, y: 0.0 },))?;
+        self.piece.draw_ghost(&mut self.matrix, ctx)?;
+        self.piece.draw_next(ctx)?;
+        self.piece.draw(ctx)?;
+        graphics::present(ctx)?;
+        ggez::timer::yield_now();
         Ok(())
     }
 
-    fn key_down_event(&mut self, _: &mut Context, keycode: event::Keycode, _: event::Mod, repeat: bool) {
+    fn key_down_event(&mut self, _: &mut Context, keycode: event::KeyCode, _: event::KeyMods, repeat: bool) {
         if repeat == true {
             return;
         }
         match keycode {
-            event::Keycode::Down => self.input.down = true,
-            event::Keycode::Space => self.piece.hard_drop(&mut self.matrix),
-            event::Keycode::Left => {
+            event::KeyCode::Down => self.input.down = true,
+            event::KeyCode::Space => self.piece.hard_drop(&mut self.matrix),
+            event::KeyCode::Left => {
                 self.input.right = false;
                 self.input.left = true;
                 self.input.das = 0;
             },
-            event::Keycode::Right => {
+            event::KeyCode::Right => {
                 self.input.left = false;
                 self.input.right = true;
                 self.input.das = 0;
             },
-            event::Keycode::Z => self.piece.rotate(&mut self.matrix, 3),
-            event::Keycode::X => self.piece.rotate(&mut self.matrix, 1),
-            event::Keycode::C => self.piece.rotate(&mut self.matrix, 2),
+            event::KeyCode::Z => self.piece.rotate(&mut self.matrix, 3),
+            event::KeyCode::X => self.piece.rotate(&mut self.matrix, 1),
+            event::KeyCode::C => self.piece.rotate(&mut self.matrix, 2),
             _ => { }
         }
     }
 
-    fn key_up_event(&mut self, _: &mut Context, keycode: event::Keycode, _: event::Mod, repeat: bool) {
-        if repeat == true {
-            return;
-        }
-
+    fn key_up_event(&mut self, _: &mut Context, keycode: event::KeyCode, _: event::KeyMods) {
         match keycode {
-            event::Keycode::Down => {
+            event::KeyCode::Down => {
                 self.input.down = false;
                 self.input.down_frames = 0;
             }
-            event::Keycode::Left => {
+            event::KeyCode::Left => {
                 self.input.left = false;
             }
-            event::Keycode::Right => {
+            event::KeyCode::Right => {
                 self.input.right = false;
             }
             _ => { }
@@ -133,15 +121,24 @@ impl event::EventHandler for MainState {
 }
 
 pub fn main() {
-    let mut c = conf::Conf::new();
-    c.window_mode.height = 22 * 32 as u32;
-    c.window_mode.width = 16 * 32 as u32;
-    //c.vsync = false;
-    let ctx = &mut Context::load_from_conf("ggetris", "cn", c).unwrap();
-    let bg = Color::new(0.0, 0.0, 0.0, 1.0);
-    graphics::set_screen_coordinates(ctx, graphics::Rect::new(0.0, 0.0, 16.0, 22.0));
-    graphics::set_background_color(ctx, bg);
-    let state = &mut MainState::new(ctx).unwrap();
-    event::run(ctx, state).unwrap();
+    let (mut ctx, mut event_loop) =
+       ContextBuilder::new("ggetris", "chinatsu")
+            .window_mode(conf::WindowMode {
+                height: 22.0 * 32.0,
+                width: 16.0 * 32.0,
+                maximized: false,
+                fullscreen_type: conf::FullscreenType::Windowed,
+                borderless: false,
+                min_width: 0.0,
+                max_width: 0.0,
+                min_height: 0.0,
+                max_height: 0.0,
+                resizable: false
+            })
+            .build()
+            .unwrap();
+    graphics::set_screen_coordinates(&mut ctx, graphics::Rect::new(0.5, 0.5, 16.0, 22.0)).unwrap();
+    let state = &mut MainState::new(&mut ctx).unwrap();
+    event::run(&mut ctx, &mut event_loop, state).unwrap();
     //flame::dump_html(&mut File::create("flame-graph.html").unwrap()).unwrap();
 }
