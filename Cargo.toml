@@ -2,6 +2,7 @@
 name = "ggetris"
 version = "0.1.0"
 authors = ["chinatsu <lolexplode@gmail.com>"]
+edition = "2018"
 
 [dependencies]
 ggez = "0.5.1"

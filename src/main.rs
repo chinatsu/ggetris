@@ -19,30 +19,37 @@ use inputstate::InputState;
 struct MainState {
     piece: Piece,
     matrix: Matrix,
-    input: InputState
+    input: InputState,
+    spritebatch: graphics::spritebatch::SpriteBatch,
+    fps: f64
 }
 
 impl MainState {
-    fn new(_ctx: &mut Context) -> GameResult<MainState> {
+    fn new(ctx: &mut Context) -> GameResult<MainState> {
+        let image = graphics::Image::new(ctx, "/tileset.png")?;
+        let batch = graphics::spritebatch::SpriteBatch::new(image);
         let s = MainState {
             piece: Piece::new(),
             matrix: Matrix::new(),
-            input: InputState::new()
+            input: InputState::new(),
+            spritebatch: batch,
+            fps: timer::fps(ctx)
         };
         Ok(s)
     }
 }
 
 impl event::EventHandler for MainState {
-    fn update(&mut self, _ctx: &mut Context) -> GameResult<()> {
-        //print!("{:.2} FPS        \r", timer::get_fps(_ctx));
+    fn update(&mut self, ctx: &mut Context) -> GameResult<()> {
+        self.fps = timer::fps(ctx);
+        print!("{:.2} FPS        \r", self.fps);
         if self.input.down {
             self.input.down_frames += 1;
             if self.input.down_frames % 1 == 0 {
                 self.piece.shift(&mut self.matrix, Point { x: 0, y: 1 })
             }
         }
-        if self.input.das > 8 && self.input.left {
+        if self.input.das > 7 && self.input.left {
             self.piece.instant_das(&mut self.matrix, Point { x: -1, y: 0 });
             self.input.das += 1;
         } else if self.input.left {
@@ -51,7 +58,7 @@ impl event::EventHandler for MainState {
             }
             self.input.das += 1;
         }
-        if self.input.das > 8 && self.input.right {
+        if self.input.das > 7 && self.input.right {
             self.piece.instant_das(&mut self.matrix, Point { x: 1, y: 0 });
             self.input.das += 1;
         } else if self.input.right {
@@ -65,14 +72,18 @@ impl event::EventHandler for MainState {
     }
 
     fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
-        graphics::clear(ctx, graphics::BLACK);
+        graphics::clear(ctx, graphics::Color::new(0.215, 0.231, 0.266, 1.0));
 
-        self.matrix.draw(ctx)?;
-        let line = graphics::Mesh::new_line(ctx, &[mint::Point2{x: 10.5, y: 0.0}, mint::Point2{x: 10.5, y: 22.5}], 0.032, graphics::WHITE)?;
+        let line = graphics::Mesh::new_line(ctx, &[mint::Point2{x: 11.0, y: 0.0}, mint::Point2{x: 11.0, y: 23.0}], 0.032, graphics::WHITE)?;
         graphics::draw(ctx, &line, (ggez::mint::Point2 { x: 0.0, y: 0.0 },))?;
-        self.piece.draw_ghost(&mut self.matrix, ctx)?;
-        self.piece.draw_next(ctx)?;
-        self.piece.draw(ctx)?;
+        self.matrix.prepare_batch(ctx, &mut self.spritebatch)?;
+        self.piece.prepare_next(&mut self.spritebatch)?;
+        self.piece.prepare_ghost(&mut self.matrix, &mut self.spritebatch)?;
+        self.piece.prepare(&mut self.spritebatch)?;
+
+        graphics::draw(ctx, &self.spritebatch, (mint::Point2{x: 0.0, y: 0.0},))?;
+        self.spritebatch.clear();
+
         graphics::present(ctx)?;
         ggez::timer::yield_now();
         Ok(())
@@ -123,22 +134,20 @@ impl event::EventHandler for MainState {
 pub fn main() {
     let (mut ctx, mut event_loop) =
        ContextBuilder::new("ggetris", "chinatsu")
+            .window_setup(conf::WindowSetup {
+                title: "ggetris".to_string(),
+                vsync: true,
+                ..Default::default()
+                })
             .window_mode(conf::WindowMode {
                 height: 22.0 * 32.0,
                 width: 16.0 * 32.0,
-                maximized: false,
-                fullscreen_type: conf::FullscreenType::Windowed,
-                borderless: false,
-                min_width: 0.0,
-                max_width: 0.0,
-                min_height: 0.0,
-                max_height: 0.0,
-                resizable: false
+                resizable: true,
+                ..Default::default()
             })
             .build()
             .unwrap();
-    graphics::set_screen_coordinates(&mut ctx, graphics::Rect::new(0.5, 0.5, 16.0, 22.0)).unwrap();
+    graphics::set_screen_coordinates(&mut ctx, graphics::Rect::new(1.0, 1.0, 16.0, 22.0)).unwrap();
     let state = &mut MainState::new(&mut ctx).unwrap();
     event::run(&mut ctx, &mut event_loop, state).unwrap();
-    //flame::dump_html(&mut File::create("flame-graph.html").unwrap()).unwrap();
 }

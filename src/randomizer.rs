@@ -2,7 +2,7 @@
 
 extern crate rand;
 use rand::{thread_rng, seq::SliceRandom};
-use piecedefs::*;
+use crate::piecedefs::*;
 use std::collections::VecDeque;
 
 pub struct Randomizer {
@@ -33,10 +33,6 @@ impl Randomizer {
         let piece = choices.pop().unwrap();
         let _ = self.history.pop_back();
         self.history.push_front(piece.clone());
-        for x in &self.history {
-            print!("{}", x.id)
-        }
-        println!();
         piece
     }
 }

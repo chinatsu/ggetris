@@ -1,10 +1,10 @@
 extern crate ggez;
 use ggez::graphics::{DrawMode, Color};
 use ggez::*;
-use point::Point;
-use piecedefs;
-use matrix::*;
-use randomizer::Randomizer;
+use crate::point::Point;
+use crate::piecedefs;
+use crate::matrix::*;
+use crate::randomizer::Randomizer;
 
 
 /// Piece struct for storing all the data of a Tetris piece
@@ -15,7 +15,7 @@ pub struct Piece {
     pub orientation: usize,
     pub id: char,
     pub color: Color,
-    pub randomizer: Randomizer,
+    pub randomizer: Randomizer
 }
 
 impl Piece {
@@ -35,61 +35,39 @@ impl Piece {
         }
     }
     /// Draws the piece onto the provided context
-    pub fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
+    pub fn prepare(&mut self, spritebatch: &mut graphics::spritebatch::SpriteBatch) -> GameResult<()> {
         for cell in &self.shape[self.orientation] {
-            let rect = graphics::Mesh::new_rectangle(
-                ctx,
-                DrawMode::fill(),
-                graphics::Rect {
-                    x: (self.origin.x + cell.x) as f32 - 0.5,
-                    y: (self.origin.y + cell.y) as f32 - 0.5,
-                    w: 1.0,
-                    h: 1.0,
-                },
-                self.color
-            )?;
+            let p = graphics::DrawParam::new()
+                .src(piecedefs::get_offset(self.id))
+                .dest(mint::Point2{x: (self.origin.x + cell.x) as f32, y: (self.origin.y + cell.y) as f32})
+                .scale(mint::Vector2{x: 1.0/22.0, y: 1.0/22.0});
+            spritebatch.add(p);
 
-            graphics::draw(ctx, &rect, (ggez::mint::Point2 { x: 0.0, y: 0.0 },))?;
         }
         Ok(())
     }
 
     /// Draws the piece onto the provided context
-    pub fn draw_next(&mut self, ctx: &mut Context) -> GameResult<()> {
+    pub fn prepare_next(&mut self, spritebatch: &mut graphics::spritebatch::SpriteBatch) -> GameResult<()> {
         for cell in &self.next_shape.shape[0] {
-            let rect = graphics::Mesh::new_rectangle(
-                ctx,
-                DrawMode::fill(),
-                graphics::Rect {
-                    x: cell.x as f32 + 12.5,
-                    y: cell.y as f32 + 2.0,
-                    w: 1.0,
-                    h: 1.0,
-                },
-                piecedefs::get_color(self.next_shape.id)
-            )?;
-            graphics::draw(ctx, &rect, (ggez::mint::Point2 { x: 0.0, y: 0.0 },))?;
+            let p = graphics::DrawParam::new()
+                .src(piecedefs::get_offset(self.next_shape.id))
+                .dest(mint::Point2{x: (13+cell.x) as f32, y: (4+cell.y) as f32})
+                .scale(mint::Vector2{x: 1.0/22.0, y: 1.0/22.0});
+            spritebatch.add(p);
         }
         Ok(())
     }
 
-    pub fn draw_ghost(&mut self, m: &mut Matrix, ctx: &mut Context) -> GameResult<()> {
-        let color = Color::new(1.0, 1.0, 1.0, 0.5);
+    pub fn prepare_ghost(&mut self, m: &mut Matrix, spritebatch: &mut graphics::spritebatch::SpriteBatch) -> GameResult<()> {
         let real_origin = self.origin;
         self.instant_das(m, Point { x: 0, y: 1 });
         for cell in self.shape[self.orientation].iter() {
-            let rect = graphics::Mesh::new_rectangle(
-                ctx,
-                DrawMode::fill(),
-                graphics::Rect {
-                    x: (self.origin.x + cell.x) as f32 - 0.5,
-                    y: (self.origin.y + cell.y) as f32 - 0.5,
-                    w: 1.0,
-                    h: 1.0,
-                },
-                color
-            )?;
-            graphics::draw(ctx, &rect, (ggez::mint::Point2 { x: 0.0, y: 0.0 },))?;
+            let p = graphics::DrawParam::new()
+                .src(piecedefs::get_offset('g'))
+                .dest(mint::Point2{x: (self.origin.x + cell.x) as f32, y: (self.origin.y + cell.y) as f32})
+                .scale(mint::Vector2{x: 1.0/22.0, y: 1.0/22.0});
+            spritebatch.add(p);
         }
         self.origin = real_origin;
         Ok(())

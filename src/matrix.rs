@@ -1,7 +1,7 @@
 extern crate ggez;
 use ggez::graphics::DrawMode;
 use ggez::*;
-use piecedefs;
+use crate::piecedefs;
 
 pub const WIDTH: usize = 10;
 pub const HEIGHT: usize = 22;
@@ -41,22 +41,15 @@ impl Matrix {
         }
     }
 
-    pub fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
+    pub fn prepare_batch(&mut self, _ctx: &mut Context, spritebatch: &mut graphics::spritebatch::SpriteBatch) -> GameResult<()> {
         for y in 0..self.state.len() {
             for x in 0..self.state[y].len() {
                 if self.state[y][x] != '0' {
-                    let rect = graphics::Mesh::new_rectangle(
-                        ctx,
-                        DrawMode::fill(),
-                        graphics::Rect {
-                            x: (1 + x) as f32 - 0.5,
-                            y: (1 + y) as f32 - 0.5,
-                            w: 1.0,
-                            h: 1.0,
-                        },
-                        piecedefs::get_color(self.state[y][x])
-                    )?;
-                    graphics::draw(ctx, &rect, (ggez::mint::Point2 { x: 0.0, y: 0.0 },))?;
+                    let p = graphics::DrawParam::new()
+                        .src(piecedefs::get_offset(self.state[y][x]))
+                        .dest(mint::Point2{x: (1+x) as f32, y: (1+y) as f32})
+                        .scale(mint::Vector2{x: 1.0/22.0, y: 1.0/22.0});
+                    spritebatch.add(p);
                 }
             }
         }

@@ -1,8 +1,8 @@
 //! Piece definitions for each of the pieces
 
 extern crate ggez;
-use ggez::graphics::Color;
-use point::*;
+use ggez::graphics::{Color, Rect};
+use crate::point::*;
 
 /// A Piecedef struct only contains its shapes and an ID
 /// used to determine color. The ID is a char for the purpose
@@ -241,7 +241,21 @@ pub fn get_color(id: char) -> Color {
         's' => Color::new(0.0, 0.8, 0.0, 1.0),
         'z' => Color::new(1.0, 0.0, 0.0, 1.0),
         'j' => Color::new(0.0, 0.0, 0.8, 1.0),
-        'i' => Color::new(0.0, 1.0, 1.0, 1.0),
+        'i' => Color::new(0.87, 0.953, 0.0, 1.0),
         _ => Color::new(0.0, 0.0, 0.0, 0.0)
+    }
+}
+
+pub fn get_offset(id: char) -> Rect {
+    match id {
+        'z' => Rect::new(0.0, 0.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
+        'l' => Rect::new(0.0, 1.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
+        'o' => Rect::new(0.0, 2.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
+        's' => Rect::new(0.0, 3.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
+        'i' => Rect::new(0.0, 4.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
+        'j' => Rect::new(0.0, 5.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
+        't' => Rect::new(0.0, 6.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
+        'g' => Rect::new(0.0, 7.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
+        _ =>   Rect::new(0.0, 0.0 * 22.0 / 264.0, 1.0, 22.0/264.0)
     }
 }
