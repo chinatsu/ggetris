@@ -8,14 +8,18 @@ pub const HEIGHT: usize = 22;
 
 pub struct Matrix {
     pub state: [[char; WIDTH]; HEIGHT],
-    pub cleared: u64
+    pub cleared: u64,
+    pub spritebatch: graphics::spritebatch::SpriteBatch
 }
 
 impl Matrix {
-    pub fn new() -> Matrix {
+    pub fn new(ctx: &mut Context) -> Matrix {
+        let image = graphics::Image::new(ctx, "/tileset.png").unwrap();
+        let batch = graphics::spritebatch::SpriteBatch::new(image);
         Matrix {
             state: [['0'; WIDTH]; HEIGHT],
-            cleared: 0
+            cleared: 0,
+            spritebatch: batch
         }
     }
 
@@ -39,9 +43,11 @@ impl Matrix {
                 row += 1;
             }
         }
+        self.prepare();
     }
 
-    pub fn prepare_batch(&mut self, _ctx: &mut Context, spritebatch: &mut graphics::spritebatch::SpriteBatch) -> GameResult<()> {
+    fn prepare(&mut self) {
+        self.spritebatch.clear();
         for y in 0..self.state.len() {
             for x in 0..self.state[y].len() {
                 if self.state[y][x] != '0' {
@@ -49,10 +55,13 @@ impl Matrix {
                         .src(piecedefs::get_offset(self.state[y][x]))
                         .dest(mint::Point2{x: (1+x) as f32, y: (1+y) as f32})
                         .scale(mint::Vector2{x: 1.0/22.0, y: 1.0/22.0});
-                    spritebatch.add(p);
+                    self.spritebatch.add(p);
                 }
             }
         }
-        Ok(())
+    }
+
+    pub fn render(&mut self, ctx: &mut Context) -> GameResult<()> {
+        graphics::draw(ctx, &self.spritebatch, (mint::Point2{x: 0.0, y: 0.0},))
     }
 }

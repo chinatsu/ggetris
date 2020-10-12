@@ -30,7 +30,7 @@ impl MainState {
         let batch = graphics::spritebatch::SpriteBatch::new(image);
         let s = MainState {
             piece: Piece::new(),
-            matrix: Matrix::new(),
+            matrix: Matrix::new(ctx),
             input: InputState::new(),
             spritebatch: batch,
             fps: timer::fps(ctx)
@@ -76,11 +76,11 @@ impl event::EventHandler for MainState {
 
         let line = graphics::Mesh::new_line(ctx, &[mint::Point2{x: 11.0, y: 0.0}, mint::Point2{x: 11.0, y: 23.0}], 0.032, graphics::WHITE)?;
         graphics::draw(ctx, &line, (ggez::mint::Point2 { x: 0.0, y: 0.0 },))?;
-        self.matrix.prepare_batch(ctx, &mut self.spritebatch)?;
         self.piece.prepare_next(&mut self.spritebatch)?;
         self.piece.prepare_ghost(&mut self.matrix, &mut self.spritebatch)?;
         self.piece.prepare(&mut self.spritebatch)?;
 
+        self.matrix.render(ctx)?;
         graphics::draw(ctx, &self.spritebatch, (mint::Point2{x: 0.0, y: 0.0},))?;
         self.spritebatch.clear();
 
