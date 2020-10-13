@@ -1,25 +1,16 @@
 //! Piece definitions for each of the pieces
 
-extern crate ggez;
-use ggez::graphics::{Color, Rect};
-use crate::point::*;
+use ggez::graphics::Rect;
+use super::point::Point;
 
-/// A Piecedef struct only contains its shapes and an ID
-/// used to determine color. The ID is a char for the purpose
-/// of clearing up which piece is which as they all are commonly
-/// referred to as a single letter.
-/// The shapes are defined as offset points from an origin, and
-/// is stored in a list with its other rotation states
+lazy_static! {
+    pub static ref PIECES: [Piecedef; 7] = [S, Z, O, T, L, I, J];
+}
+
 #[derive(Clone, Copy, Debug)]
 pub struct Piecedef {
     pub shape: [[Point; 4]; 4],
     pub id: char
-}
-
-impl PartialEq for Piecedef {
-    fn eq(&self, other: &Piecedef) -> bool {
-        self.id == other.id
-    }
 }
 
 pub const T: Piecedef = Piecedef {
@@ -232,30 +223,20 @@ pub const I: Piecedef = Piecedef {
     id: 'i'
 };
 
-/// A utility function to get a piece's color based on its ID.
-pub fn get_color(id: char) -> Color {
+pub fn get_offset(id: char) -> Rect {
     match id {
-        't' => Color::new(0.8, 0.0, 1.0, 1.0),
-        'l' => Color::new(1.0, 0.4, 0.0, 1.0),
-        'o' => Color::new(1.0, 1.0, 0.0, 1.0),
-        's' => Color::new(0.0, 0.8, 0.0, 1.0),
-        'z' => Color::new(1.0, 0.0, 0.0, 1.0),
-        'j' => Color::new(0.0, 0.0, 0.8, 1.0),
-        'i' => Color::new(0.87, 0.953, 0.0, 1.0),
-        _ => Color::new(0.0, 0.0, 0.0, 0.0)
+        'z' => get_cell(2),
+        'l' => get_cell(2),
+        'o' => get_cell(3),
+        's' => get_cell(2),
+        'i' => get_cell(4),
+        'j' => get_cell(4),
+        't' => get_cell(4),
+        'g' => get_cell(7),
+        _ =>   get_cell(9)
     }
 }
 
-pub fn get_offset(id: char) -> Rect {
-    match id {
-        'z' => Rect::new(0.0, 0.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
-        'l' => Rect::new(0.0, 1.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
-        'o' => Rect::new(0.0, 2.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
-        's' => Rect::new(0.0, 3.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
-        'i' => Rect::new(0.0, 4.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
-        'j' => Rect::new(0.0, 5.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
-        't' => Rect::new(0.0, 6.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
-        'g' => Rect::new(0.0, 7.0 * 22.0 / 264.0, 1.0, 22.0/264.0),
-        _ =>   Rect::new(0.0, 0.0 * 22.0 / 264.0, 1.0, 22.0/264.0)
-    }
+fn get_cell(val: u32) -> Rect {
+    Rect::new(0.0, val as f32 * 32.0 / 384.0, 1.0, 32.0/384.0)
 }

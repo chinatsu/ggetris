@@ -1,0 +1,11 @@
+[input]
+left = "left"
+right = "right"
+down = "down"
+harddrop = "space"
+rotate_cw = "z"
+rotate_ccw = "x"
+flip = "c"
+
+[game]
+das = 5 # represents the number of frames at 60fps
