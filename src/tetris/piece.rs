@@ -4,11 +4,11 @@ use ggez::graphics::{
     Image,
     draw,
     mint::Point2,
-    mint::Vector2,
     spritebatch::SpriteBatch,
 
 };
 
+use super::SCALE;
 use super::point::Point;
 use super::piecedefs::{Piecedef, get_offset};
 use super::matrix::{Matrix, HEIGHT, WIDTH};
@@ -34,7 +34,7 @@ impl Piece {
         Some(Piece {
             piece: randomizer.next_piece()?,
             next_piece: randomizer.next_piece()?,
-            origin: Point { x: 5, y: 2 },
+            origin: Point { x: 4, y: 1 },
             orientation: 0,
             randomizer: randomizer,
             spritebatch: batch
@@ -51,8 +51,8 @@ impl Piece {
 
     pub fn lock(&mut self, m: &mut Matrix) {
         for cell in &self.piece.shape[self.orientation] {
-            let x = cell.x + self.origin.x - 1;
-            let y = cell.y + self.origin.y - 1;
+            let x = cell.x + self.origin.x;
+            let y = cell.y + self.origin.y;
             m.state[y as usize][x as usize] = self.piece.id;
         }
         m.clear_lines();
@@ -62,7 +62,7 @@ impl Piece {
     pub fn spawn_piece(&mut self, m: &mut Matrix) -> Option<()> {
         self.piece = self.next_piece;
         self.next_piece = self.randomizer.next_piece()?;
-        self.origin = Point { x: 5, y: 2 };
+        self.origin = Point { x: 4, y: 1 };
         self.orientation = 0;
         if !self.valid_position(m, self.orientation, self.origin) {
             panic!("Game over!");
@@ -94,13 +94,13 @@ impl Piece {
     fn valid_position(&mut self, m: &mut Matrix, orientation: usize, origin: Point) -> bool {
         for cell in &self.piece.shape[orientation] {
             let offset = origin + *cell;
-            if offset.x > WIDTH as isize || offset.x <= 0 {
+            if offset.x >= WIDTH as isize || offset.x < 0 {
                 return false;
             }
-            if offset.y > HEIGHT as isize || offset.y <= 0 {
+            if offset.y >= HEIGHT as isize || offset.y < 0 {
                 return false;
             }
-            if m.state[offset.y as usize - 1][offset.x as usize - 1] != '0' {
+            if m.state[offset.y as usize][offset.x as usize] != '0' {
                 return false;
             }
         }
@@ -152,8 +152,7 @@ impl Piece {
         for cell in &self.piece.shape[self.orientation] {
             let p = DrawParam::new()
                 .src(get_offset(self.piece.id))
-                .dest(Point2{x: (self.origin.x + cell.x) as f32, y: (self.origin.y + cell.y) as f32})
-                .scale(Vector2{x: 1.0/32.0, y: 1.0/32.0});
+                .dest(Point2{x: SCALE*(self.origin.x + cell.x) as f32, y: SCALE*(self.origin.y + cell.y) as f32});
             self.spritebatch.add(p);
 
         }
@@ -164,8 +163,7 @@ impl Piece {
         for cell in &self.next_piece.shape[0] {
             let p = DrawParam::new()
                 .src(get_offset(self.next_piece.id))
-                .dest(Point2{x: (13+cell.x) as f32, y: (4+cell.y) as f32})
-                .scale(Vector2{x: 1.0/32.0, y: 1.0/32.0});
+                .dest(Point2{x: SCALE*(12+cell.x) as f32, y: SCALE*(2+cell.y) as f32});
             self.spritebatch.add(p);
         }
         Ok(())
@@ -177,8 +175,7 @@ impl Piece {
         for cell in self.piece.shape[self.orientation].iter() {
             let p = DrawParam::new()
                 .src(get_offset('g'))
-                .dest(Point2{x: (self.origin.x + cell.x) as f32, y: (self.origin.y + cell.y) as f32})
-                .scale(Vector2{x: 1.0/32.0, y: 1.0/32.0});
+                .dest(Point2{x: SCALE*(self.origin.x + cell.x) as f32, y: SCALE*(self.origin.y + cell.y) as f32});
             self.spritebatch.add(p);
         }
         self.origin = real_origin;

@@ -2,13 +2,13 @@ use ggez::{
     Context,
     GameResult,
     mint::Point2,
-    mint::Vector2,
     graphics::Image,
     graphics::DrawParam,
     graphics::draw,
     graphics::spritebatch::SpriteBatch,
 };
 use super::piecedefs::get_offset;
+use super::SCALE;
 
 pub const WIDTH: usize = 10;
 pub const HEIGHT: usize = 22;
@@ -30,10 +30,9 @@ impl Matrix {
         }
     }
 
-    /// Clear fully occupied lines
     pub fn clear_lines(&mut self) {
         let mut row: usize = 0;
-        while row <= HEIGHT - 1 {
+        while row < HEIGHT {
             let mut count = 0;
             for cell in &self.state[row] {
                 if *cell != '0' {
@@ -60,8 +59,7 @@ impl Matrix {
                 if self.state[y][x] != '0' {
                     let p = DrawParam::new()
                         .src(get_offset(self.state[y][x]))
-                        .dest(Point2{x: (1+x) as f32, y: (1+y) as f32})
-                        .scale(Vector2{x: 1.0/32.0, y: 1.0/32.0});
+                        .dest(Point2{x: SCALE*x as f32, y: SCALE*y as f32});
                     self.spritebatch.add(p);
                 }
             }

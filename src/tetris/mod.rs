@@ -9,3 +9,4 @@ mod background;
 mod tetrisstate;
 
 pub use tetrisstate::TetrisState;
+const SCALE: f32 = 32.0;

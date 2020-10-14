@@ -4,9 +4,7 @@ use ggez::{
     ContextBuilder,
     conf::WindowMode,
     conf::WindowSetup,
-    event::run,
-    graphics::Rect,
-    graphics::set_screen_coordinates
+    event::run
 };
 use std::env;
 use std::path;
@@ -42,8 +40,6 @@ pub fn main() {
             .build()
             .unwrap();
 
-    // TODO: sort this crap out and use actual coordinates >:(
-    set_screen_coordinates(&mut ctx, Rect::new(1.0, 1.0, 16.0, 22.0)).unwrap();
     let state = &mut TetrisState::new(&mut ctx).unwrap();
     run(&mut ctx, &mut event_loop, state).unwrap();
 }

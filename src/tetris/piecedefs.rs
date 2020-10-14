@@ -1,5 +1,3 @@
-//! Piece definitions for each of the pieces
-
 use ggez::graphics::Rect;
 use super::point::Point;
 
