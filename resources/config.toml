@@ -3,8 +3,8 @@ left = "left"
 right = "right"
 down = "down"
 harddrop = "space"
-rotate_cw = "z"
-rotate_ccw = "x"
+rotate_ccw = "z"
+rotate_cw = "x"
 flip = "c"
 
 [game]
