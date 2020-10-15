@@ -9,11 +9,10 @@ use ggez::{
 use std::env;
 use std::path;
 
-mod tetris;
 mod config;
 mod gfx;
-mod mainstate;
-use mainstate::MainState;
+mod state;
+use state::MainState;
 use config::Config;
 
 pub fn main() {

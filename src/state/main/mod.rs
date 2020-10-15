@@ -1,5 +1,5 @@
 use ggez::{timer, event};
-use crate::tetris::TetrisState;
+use super::TetrisState;
 use crate::Config;
 
 pub enum State {

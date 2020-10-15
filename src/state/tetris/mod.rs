@@ -5,14 +5,23 @@ use ggez::{
     event::KeyCode,
     timer,
 };
+mod piece;
+mod point;
+mod piecedefs;
+mod stats;
+mod inputstate;
+mod matrix;
+mod randomizer;
 
-use super::piece::Piece;
-use super::matrix::Matrix;
-use super::point::Point;
-use super::inputstate::InputState;
-use super::stats::Stats;
 use crate::Config;
 use crate::gfx::Background;
+use piece::Piece;
+use matrix::Matrix;
+use point::Point;
+use inputstate::InputState;
+use stats::Stats;
+
+const SCALE: f32 = 32.0;
 
 pub struct TetrisState {
     config: Config,
