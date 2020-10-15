@@ -1,5 +1,5 @@
 use std::time::{Duration, Instant};
-use ggez::mint;
+use ggez::{mint, timer};
 use crate::gfx::FontSprites;
 use super::matrix::Matrix;
 
@@ -47,11 +47,12 @@ impl Stats {
             self.update();
         }
         self.sprites.clear();
-        self.sprites.prepare(String::from("stats:"), mint::Point2{x: 0.0, y: 0.0});
-        self.sprites.prepare(format!("lines:{}", m.cleared), mint::Point2{x: 0.0, y: 32.0});
+        self.sprites.prepare(String::from("stats:"), mint::Point2{x: 32.0*10.5, y: 32.0*5.0});
+        self.sprites.prepare(format!("lines:{}", m.cleared), mint::Point2{x: 32.0*10.5, y: 32.0*6.0});
         if self.started != TimerStatus::Uninitialized {
-            self.sprites.prepare(format!("40l:{}.{:.2}", self.time.as_secs(), self.time.subsec_millis()), mint::Point2{x: 0.0, y: 48.0});
+            self.sprites.prepare(format!("40l:{}.{:.2}", self.time.as_secs(), self.time.subsec_millis()), mint::Point2{x: 32.0*10.5, y: 32.0*7.0});
         }
+        self.sprites.prepare(format!("fps:{:.2}", timer::fps(ctx)), mint::Point2{x: 32.0*10.5, y: 32.0*21.0});
         self.sprites.render(ctx)
     }
 }

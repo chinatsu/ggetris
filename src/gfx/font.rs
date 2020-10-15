@@ -29,7 +29,7 @@ impl FontSprites {
     }
 
     pub fn render(&mut self, ctx: &mut ggez::Context) -> ggez::GameResult {
-        graphics::draw(ctx, &self.spritebatch, (mint::Point2{x: 32.0*10.5, y: 32.0*5.0},))
+        graphics::draw(ctx, &self.spritebatch, (mint::Point2{x: 0.0, y: 0.0},))
     }
 }
 

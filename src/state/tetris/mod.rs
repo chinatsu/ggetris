@@ -3,7 +3,6 @@ use ggez::{
     GameResult,
     graphics,
     event::KeyCode,
-    timer,
 };
 mod piece;
 mod point;
@@ -82,7 +81,6 @@ impl TetrisState {
         self.stats.render(ctx, &self.matrix)?;
         graphics::present(ctx)?;
 
-        print!("Framerate: {:.2}    \r", timer::fps(ctx));
         Ok(())
     }
 
