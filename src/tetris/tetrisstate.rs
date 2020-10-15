@@ -32,7 +32,7 @@ impl TetrisState {
             piece: Piece::new(ctx).unwrap(),
             matrix: Matrix::new(ctx),
             input: InputState::new(),
-            stats: Stats::new(),
+            stats: Stats::new(ctx),
             background: Background::new(ctx)?
         })
     }
@@ -75,6 +75,7 @@ impl EventHandler for TetrisState {
         self.background.render(ctx)?;
         self.matrix.render(ctx)?;
         self.piece.render(ctx, &mut self.matrix)?;
+        self.stats.render(ctx, &self.matrix)?;
         graphics::present(ctx)?;
 
         print!("Framerate: {:.2}    \r", timer::fps(ctx));

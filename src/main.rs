@@ -10,9 +10,10 @@ use std::env;
 use std::path;
 
 mod tetris;
-mod input;
+mod config;
+mod sprites;
 use tetris::TetrisState;
-use input::Config;
+use config::Config;
 
 pub fn main() {
     let resource_dir = if let Ok(manifest_dir) = env::var("CARGO_MANIFEST_DIR") {

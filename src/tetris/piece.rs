@@ -1,16 +1,9 @@
 use ggez::{GameResult, Context};
-use ggez::graphics::{
-    DrawParam,
-    Image,
-    draw,
-    mint::Point2,
-    spritebatch::SpriteBatch,
 
-};
-
+use crate::sprites::PieceSprites;
 use super::SCALE;
 use super::point::Point;
-use super::piecedefs::{Piecedef, get_offset};
+use super::piecedefs::{Piecedef};
 use super::matrix::{Matrix, HEIGHT, WIDTH};
 use super::stats::Stats;
 use super::randomizer::Randomizer;
@@ -22,14 +15,12 @@ pub struct Piece {
     pub origin: Point,
     pub orientation: usize,
     pub randomizer: Randomizer,
-    pub spritebatch: SpriteBatch
+    sprites: PieceSprites
 }
 
 impl Piece {
     pub fn new(ctx: &mut Context) -> Option<Piece> {
         let mut randomizer = Randomizer::new();
-        let image = Image::new(ctx, "/gfx/tileset.png").unwrap();
-        let batch = SpriteBatch::new(image);
 
         Some(Piece {
             piece: randomizer.next_piece()?,
@@ -37,7 +28,7 @@ impl Piece {
             origin: Point { x: 4, y: 1 },
             orientation: 0,
             randomizer: randomizer,
-            spritebatch: batch
+            sprites: PieceSprites::new(ctx, SCALE)
         })
     }
 
@@ -77,8 +68,7 @@ impl Piece {
         self.instant_das(m, Point { x: 0, y: 1});
         self.lock(m);
         if stats.started == 1 && m.cleared >= 40 {
-            let time = stats.stop();
-            println!("{}.{} seconds", time.as_secs(), time.subsec_nanos());
+            stats.stop();
         }
     }
 
@@ -140,45 +130,32 @@ impl Piece {
     }
 
     pub fn render(&mut self, ctx: &mut Context, matrix: &mut Matrix) -> GameResult<()> {
-        self.prepare_next()?;
-        self.prepare_ghost(matrix)?;
-        self.prepare()?;
-        draw(ctx, &self.spritebatch, (Point2{x: 0.0, y: 0.0},))?;
-        self.spritebatch.clear();
+        self.sprites.clear();
+        self.prepare_next();
+        self.prepare_ghost(matrix);
+        self.prepare();
+        self.sprites.render(ctx)?;
         Ok(())
     }
 
-    fn prepare(&mut self) -> GameResult<()> {
+    fn prepare(&mut self) {
         for cell in &self.piece.shape[self.orientation] {
-            let p = DrawParam::new()
-                .src(get_offset(self.piece.id))
-                .dest(Point2{x: SCALE*(self.origin.x + cell.x) as f32, y: SCALE*(self.origin.y + cell.y) as f32});
-            self.spritebatch.add(p);
-
+            self.sprites.prepare(self.piece.id, (self.origin.x + cell.x) as f32, (self.origin.y + cell.y) as f32);
         }
-        Ok(())
     }
 
-    fn prepare_next(&mut self) -> GameResult<()> {
+    fn prepare_next(&mut self) {
         for cell in &self.next_piece.shape[0] {
-            let p = DrawParam::new()
-                .src(get_offset(self.next_piece.id))
-                .dest(Point2{x: SCALE*(12+cell.x) as f32, y: SCALE*(2+cell.y) as f32});
-            self.spritebatch.add(p);
+            self.sprites.prepare(self.next_piece.id, (12+cell.x) as f32, (2+cell.y) as f32);
         }
-        Ok(())
     }
 
-    fn prepare_ghost(&mut self, m: &mut Matrix) -> GameResult<()> {
+    fn prepare_ghost(&mut self, m: &mut Matrix) {
         let real_origin = self.origin;
         self.instant_das(m, Point { x: 0, y: 1 });
         for cell in self.piece.shape[self.orientation].iter() {
-            let p = DrawParam::new()
-                .src(get_offset('g'))
-                .dest(Point2{x: SCALE*(self.origin.x + cell.x) as f32, y: SCALE*(self.origin.y + cell.y) as f32});
-            self.spritebatch.add(p);
+            self.sprites.prepare('g', (self.origin.x + cell.x) as f32, (self.origin.y + cell.y) as f32);
         }
         self.origin = real_origin;
-        Ok(())
     }
 }

@@ -1,13 +1,8 @@
 use ggez::{
     Context,
     GameResult,
-    mint::Point2,
-    graphics::Image,
-    graphics::DrawParam,
-    graphics::draw,
-    graphics::spritebatch::SpriteBatch,
 };
-use super::piecedefs::get_offset;
+use crate::sprites::PieceSprites;
 use super::SCALE;
 
 pub const WIDTH: usize = 10;
@@ -16,17 +11,15 @@ pub const HEIGHT: usize = 22;
 pub struct Matrix {
     pub state: [[char; WIDTH]; HEIGHT],
     pub cleared: u64,
-    spritebatch: SpriteBatch
+    sprites: PieceSprites
 }
 
 impl Matrix {
     pub fn new(ctx: &mut Context) -> Matrix {
-        let image = Image::new(ctx, "/gfx/tileset.png").unwrap();
-        let batch = SpriteBatch::new(image);
         Matrix {
             state: [['0'; WIDTH]; HEIGHT],
             cleared: 0,
-            spritebatch: batch
+            sprites: PieceSprites::new(ctx, SCALE)
         }
     }
 
@@ -53,20 +46,17 @@ impl Matrix {
     }
 
     fn prepare(&mut self) {
-        self.spritebatch.clear();
+        self.sprites.clear();
         for y in 0..self.state.len() {
             for x in 0..self.state[y].len() {
                 if self.state[y][x] != '0' {
-                    let p = DrawParam::new()
-                        .src(get_offset(self.state[y][x]))
-                        .dest(Point2{x: SCALE*x as f32, y: SCALE*y as f32});
-                    self.spritebatch.add(p);
+                    self.sprites.prepare(self.state[y][x], x as f32, y as f32);
                 }
             }
         }
     }
 
     pub fn render(&mut self, ctx: &mut Context) -> GameResult {
-        draw(ctx, &self.spritebatch, (Point2{x: 0.0, y: 0.0},))
+        self.sprites.render(ctx)
     }
 }

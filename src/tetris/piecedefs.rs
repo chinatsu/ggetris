@@ -1,4 +1,3 @@
-use ggez::graphics::Rect;
 use super::point::Point;
 
 lazy_static! {
@@ -220,21 +219,3 @@ pub const I: Piecedef = Piecedef {
     ],
     id: 'i'
 };
-
-pub fn get_offset(id: char) -> Rect {
-    match id {
-        'z' => get_cell(2),
-        'l' => get_cell(2),
-        'o' => get_cell(3),
-        's' => get_cell(2),
-        'i' => get_cell(4),
-        'j' => get_cell(4),
-        't' => get_cell(4),
-        'g' => get_cell(7),
-        _ =>   get_cell(9)
-    }
-}
-
-fn get_cell(val: u32) -> Rect {
-    Rect::new(0.0, val as f32 * 32.0 / 384.0, 1.0, 32.0/384.0)
-}
