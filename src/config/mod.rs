@@ -19,7 +19,8 @@ struct InputTomlConfig {
     harddrop: String,
     rotate_cw: String,
     rotate_ccw: String,
-    flip: String
+    flip: String,
+    restart: String,
 }
 
 #[derive(Deserialize)]
@@ -39,7 +40,8 @@ pub struct InputConfig {
     pub harddrop: KeyCode,
     pub rotate_cw: KeyCode,
     pub rotate_ccw: KeyCode,
-    pub flip: KeyCode
+    pub flip: KeyCode,
+    pub restart: KeyCode
 }
 
 impl Config {
@@ -58,6 +60,7 @@ impl Config {
                 rotate_cw: input::get_keycode(config.input.rotate_cw),
                 rotate_ccw: input::get_keycode(config.input.rotate_ccw),
                 flip: input::get_keycode(config.input.flip),
+                restart: input::get_keycode(config.input.restart)
             },
             game: config.game
         })

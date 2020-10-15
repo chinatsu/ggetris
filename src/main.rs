@@ -11,8 +11,9 @@ use std::path;
 
 mod tetris;
 mod config;
-mod sprites;
-use tetris::TetrisState;
+mod gfx;
+mod mainstate;
+use mainstate::MainState;
 use config::Config;
 
 pub fn main() {
@@ -41,6 +42,6 @@ pub fn main() {
             .build()
             .unwrap();
 
-    let state = &mut TetrisState::new(&mut ctx).unwrap();
+    let state = &mut MainState::new(&mut ctx).unwrap();
     run(&mut ctx, &mut event_loop, state).unwrap();
 }

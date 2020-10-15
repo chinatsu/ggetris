@@ -2,9 +2,7 @@ use ggez::{
     Context,
     GameResult,
     graphics,
-    event::EventHandler,
     event::KeyCode,
-    event::KeyMods,
     timer,
 };
 
@@ -13,8 +11,8 @@ use super::matrix::Matrix;
 use super::point::Point;
 use super::inputstate::InputState;
 use super::stats::Stats;
-use super::background::Background;
 use crate::Config;
+use crate::gfx::Background;
 
 pub struct TetrisState {
     config: Config,
@@ -38,38 +36,35 @@ impl TetrisState {
     }
 }
 
-impl EventHandler for TetrisState {
-    fn update(&mut self, ctx: &mut Context) -> GameResult<()> {
-        while timer::check_update_time(ctx, 60) {
-            if self.input.down {
-                self.input.down_frames += 1;
-                if self.input.down_frames % 1 == 0 {
-                    self.piece.shift(&mut self.matrix, Point { x: 0, y: 1 })
-                }
-            }
-            if self.input.das > self.config.game.das && self.input.left {
-                self.piece.instant_das(&mut self.matrix, Point { x: -1, y: 0 });
-                self.input.das += 1;
-            } else if self.input.left {
-                if self.input.das == 0 {
-                    self.piece.shift(&mut self.matrix, Point { x: -1, y: 0 });
-                }
-                self.input.das += 1;
-            }
-            if self.input.das > self.config.game.das && self.input.right {
-                self.piece.instant_das(&mut self.matrix, Point { x: 1, y: 0 });
-                self.input.das += 1;
-            } else if self.input.right {
-                if self.input.das == 0 {
-                    self.piece.shift(&mut self.matrix, Point { x: 1, y: 0 });
-                }
-                self.input.das += 1;
+impl TetrisState {
+    pub fn update(&mut self) {
+        if self.input.down {
+            self.input.down_frames += 1;
+            if self.input.down_frames % 1 == 0 {
+                self.piece.shift(&mut self.matrix, Point { x: 0, y: 1 })
             }
         }
-        Ok(())
+        if self.input.das > self.config.game.das && self.input.left {
+            self.piece.instant_das(&mut self.matrix, Point { x: -1, y: 0 });
+            self.input.das += 1;
+        } else if self.input.left {
+            if self.input.das == 0 {
+                self.piece.shift(&mut self.matrix, Point { x: -1, y: 0 });
+            }
+            self.input.das += 1;
+        }
+        if self.input.das > self.config.game.das && self.input.right {
+            self.piece.instant_das(&mut self.matrix, Point { x: 1, y: 0 });
+            self.input.das += 1;
+        } else if self.input.right {
+            if self.input.das == 0 {
+                self.piece.shift(&mut self.matrix, Point { x: 1, y: 0 });
+            }
+            self.input.das += 1;
+        }
     }
 
-    fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
+    pub fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
         graphics::clear(ctx, graphics::BLACK);
 
         self.background.render(ctx)?;
@@ -82,11 +77,7 @@ impl EventHandler for TetrisState {
         Ok(())
     }
 
-    fn key_down_event(&mut self, _: &mut Context, keycode: KeyCode, _: KeyMods, repeat: bool) {
-        if repeat == true {
-            return;
-        }
-
+    pub fn key_down_event(&mut self, keycode: KeyCode) {
         if keycode == self.config.input.down {
             self.input.down = true
         } else if keycode == self.config.input.harddrop {
@@ -108,7 +99,7 @@ impl EventHandler for TetrisState {
         }
     }
 
-    fn key_up_event(&mut self, _: &mut Context, keycode: KeyCode, _: KeyMods) {
+    pub fn key_up_event(&mut self, keycode: KeyCode) {
         if keycode == self.config.input.down {
             self.input.down = false;
             self.input.down_frames = 0;

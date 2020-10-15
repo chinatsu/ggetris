@@ -3,35 +3,6 @@ use ggez::graphics::{Image, DrawParam, Rect, WrapMode, draw};
 use ggez::mint::{Point2, Vector2};
 use std::path::Path;
 
-pub struct ParallaxImage {
-    image: Image,
-    acc: f32,
-    speed: f32
-}
-
-impl ParallaxImage {
-    fn new<P: AsRef<Path>>(ctx: &mut Context, path: P, speed: f32) -> GameResult<ParallaxImage> {
-        let mut img = Image::new(ctx, path)?;
-        img.set_wrap(WrapMode::Tile, WrapMode::Tile);
-        Ok(ParallaxImage {
-            image: img,
-            acc: 0.0,
-            speed: speed
-        })
-    }
-
-    fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
-        draw(
-             ctx,
-             &self.image,
-             DrawParam::new()
-                .src(Rect{x: self.acc, y: 0.0, w: 1.0, h: 1.0})
-        )?;
-        self.acc = (self.acc + self.speed) % 1.0;
-        Ok(())
-    }
-}
-
 pub struct Background {
     far: ParallaxImage,
     middle: ParallaxImage,
@@ -63,6 +34,35 @@ impl Background {
                 .scale(Vector2{x: 1.0, y: 1.0})
         )?;
 
+        Ok(())
+    }
+}
+
+pub struct ParallaxImage {
+    image: Image,
+    acc: f32,
+    speed: f32
+}
+
+impl ParallaxImage {
+    fn new<P: AsRef<Path>>(ctx: &mut Context, path: P, speed: f32) -> GameResult<ParallaxImage> {
+        let mut img = Image::new(ctx, path)?;
+        img.set_wrap(WrapMode::Tile, WrapMode::Tile);
+        Ok(ParallaxImage {
+            image: img,
+            acc: 0.0,
+            speed: speed
+        })
+    }
+
+    fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
+        draw(
+             ctx,
+             &self.image,
+             DrawParam::new()
+                .src(Rect{x: self.acc, y: 0.0, w: 1.0, h: 1.0})
+        )?;
+        self.acc = (self.acc + self.speed) % 1.0;
         Ok(())
     }
 }

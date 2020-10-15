@@ -1,11 +1,11 @@
 use ggez::{GameResult, Context};
 
-use crate::sprites::PieceSprites;
+use crate::gfx::PieceSprites;
 use super::SCALE;
 use super::point::Point;
 use super::piecedefs::{Piecedef};
 use super::matrix::{Matrix, HEIGHT, WIDTH};
-use super::stats::Stats;
+use super::stats::{Stats, TimerStatus};
 use super::randomizer::Randomizer;
 
 
@@ -62,12 +62,12 @@ impl Piece {
     }
 
     pub fn hard_drop(&mut self, m: &mut Matrix, stats: &mut Stats) {
-        if stats.started == 0 {
+        if stats.started == TimerStatus::Uninitialized {
             stats.start();
         }
         self.instant_das(m, Point { x: 0, y: 1});
         self.lock(m);
-        if stats.started == 1 && m.cleared >= 40 {
+        if stats.started == TimerStatus::Started && m.cleared >= 40 {
             stats.stop();
         }
     }

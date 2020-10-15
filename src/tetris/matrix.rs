@@ -2,7 +2,7 @@ use ggez::{
     Context,
     GameResult,
 };
-use crate::sprites::PieceSprites;
+use crate::gfx::PieceSprites;
 use super::SCALE;
 
 pub const WIDTH: usize = 10;
