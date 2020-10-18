@@ -36,7 +36,7 @@ impl TetrisState {
         Ok(TetrisState {
             config: Config::new(ctx)?,
             piece: Piece::new(ctx).unwrap(),
-            matrix: Matrix::new(ctx),
+            matrix: Matrix::new(ctx)?,
             input: InputState::new(),
             stats: Stats::new(ctx),
             background: Background::new(ctx)?

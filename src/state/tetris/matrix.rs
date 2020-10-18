@@ -3,41 +3,53 @@ use ggez::{
     GameResult,
 };
 use crate::gfx::PieceSprites;
+use crate::Level;
 use super::SCALE;
 
-pub const WIDTH: usize = 10;
-pub const HEIGHT: usize = 22;
 
 pub struct Matrix {
-    pub state: [[char; WIDTH]; HEIGHT],
+    pub state: Vec<Vec<char>>,
     pub cleared: u64,
+    pub width: usize,
+    pub height: usize, 
     sprites: PieceSprites
 }
 
 impl Matrix {
-    pub fn new(ctx: &mut Context) -> Matrix {
-        Matrix {
-            state: [['0'; WIDTH]; HEIGHT],
+    pub fn new(ctx: &mut Context) -> ggez::GameResult<Matrix> {
+        let level = Level::new(ctx, "level1".into())?;
+        let state = level.tiles.iter().map(|line| line.iter().map(|tile| {
+            match tile {
+                Some(_) => 'w',
+                None => '0'
+            }
+        }).collect::<Vec<char>>()).collect::<Vec<Vec<char>>>();
+        let mut m = Matrix {
+            state: state,
+            width: level.width,
+            height: level.height,
             cleared: 0,
             sprites: PieceSprites::new(ctx, SCALE)
-        }
+        };
+        m.prepare();
+        Ok(m)
     }
 
     pub fn clear_lines(&mut self) {
         let mut row: usize = 0;
-        while row < HEIGHT {
+        while row < self.height {
             let mut count = 0;
             for cell in &self.state[row] {
                 if *cell != '0' {
                     count += 1;
                 }
             }
-            if count == WIDTH {
+            if count == self.width {
                 self.cleared += 1;
                 for temp_row in (0..row).rev() {
-                    self.state[temp_row + 1] = self.state[temp_row];
+                    self.state[temp_row + 1] = self.state[temp_row].clone();
                 }
-                self.state[0] = ['0'; WIDTH];
+                self.state[0] = vec!['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'];
             } else {
                 row += 1;
             }

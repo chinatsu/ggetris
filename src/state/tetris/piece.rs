@@ -4,7 +4,7 @@ use crate::gfx::PieceSprites;
 use super::SCALE;
 use super::point::Point;
 use super::piecedefs::{Piecedef};
-use super::matrix::{Matrix, HEIGHT, WIDTH};
+use super::matrix::Matrix;
 use super::stats::{Stats, TimerStatus};
 use super::randomizer::Randomizer;
 
@@ -84,10 +84,10 @@ impl Piece {
     fn valid_position(&mut self, m: &mut Matrix, orientation: usize, origin: Point) -> bool {
         for cell in &self.piece.shape[orientation] {
             let offset = origin + *cell;
-            if offset.x >= WIDTH as isize || offset.x < 0 {
+            if offset.x >= m.width as isize || offset.x < 0 {
                 return false;
             }
-            if offset.y >= HEIGHT as isize || offset.y < 0 {
+            if offset.y >= m.height as isize || offset.y < 0 {
                 return false;
             }
             if m.state[offset.y as usize][offset.x as usize] != '0' {

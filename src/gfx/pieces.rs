@@ -42,6 +42,7 @@ fn get_offset(id: char) -> graphics::Rect {
         'j' => get_cell(4),
         't' => get_cell(4),
         'g' => get_cell(7),
+        'w' => get_cell(8),
         _ =>   get_cell(9)
     }
 }
