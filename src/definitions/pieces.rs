@@ -1,4 +1,4 @@
-use super::point::Point;
+use crate::point::Point;
 
 lazy_static! {
     pub static ref PIECES: [Piecedef; 7] = [S, Z, O, T, L, I, J];

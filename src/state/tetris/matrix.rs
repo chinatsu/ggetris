@@ -17,15 +17,9 @@ pub struct Matrix {
 
 impl Matrix {
     pub fn new(ctx: &mut Context) -> ggez::GameResult<Matrix> {
-        let level = Level::new(ctx, "level1".into())?;
-        let state = level.tiles.iter().map(|line| line.iter().map(|tile| {
-            match tile {
-                Some(_) => 'w',
-                None => '0'
-            }
-        }).collect::<Vec<char>>()).collect::<Vec<Vec<char>>>();
+        let level = Level::new(ctx, "level1".into(), false)?;
         let mut m = Matrix {
-            state: state,
+            state: level.tiles,
             width: level.width,
             height: level.height,
             cleared: 0,

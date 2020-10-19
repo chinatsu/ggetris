@@ -2,8 +2,8 @@ use ggez::{GameResult, Context};
 
 use crate::gfx::PieceSprites;
 use super::SCALE;
-use super::point::Point;
-use super::piecedefs::{Piecedef};
+use crate::point::Point;
+use crate::definitions::pieces::Piecedef;
 use super::matrix::Matrix;
 use super::stats::{Stats, TimerStatus};
 use super::randomizer::Randomizer;

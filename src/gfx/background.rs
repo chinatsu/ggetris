@@ -8,6 +8,7 @@ pub struct Background {
     middle: ParallaxImage,
     foreground: ParallaxImage,
     frame: Image,
+    frame_toggled: bool,
 }
 
 impl Background {
@@ -16,23 +17,29 @@ impl Background {
             far: ParallaxImage::new(ctx, "/gfx/far.png", 0.00003)?,
             middle: ParallaxImage::new(ctx, "/gfx/sand.png", 0.00007)?,
             foreground: ParallaxImage::new(ctx, "/gfx/foreground-merged.png", 0.00016)?,
-            frame: Image::new(ctx, "/gfx/frame.png")?
+            frame: Image::new(ctx, "/gfx/frame.png")?,
+            frame_toggled: true
         })
     }
 
+    pub fn use_frame(&mut self, r#use: bool) {
+        self.frame_toggled = r#use;
+    }
 
     pub fn render(&mut self, ctx: &mut Context) -> GameResult<()> {
         self.far.draw(ctx)?;
         self.middle.draw(ctx)?;
         self.foreground.draw(ctx)?;
 
-        draw(
-             ctx,
-             &self.frame,
-             DrawParam::new()
-                .dest(Point2{x: 0.0, y: 0.0})
-                .scale(Vector2{x: 1.0, y: 1.0})
-        )?;
+        if self.frame_toggled {
+            draw(
+                 ctx,
+                 &self.frame,
+                 DrawParam::new()
+                    .dest(Point2{x: 0.0, y: 0.0})
+                    .scale(Vector2{x: 1.0, y: 1.0})
+            )?;
+        }
 
         Ok(())
     }

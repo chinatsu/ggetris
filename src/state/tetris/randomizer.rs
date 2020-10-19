@@ -1,5 +1,5 @@
 use rand::{thread_rng, seq::SliceRandom};
-use super::piecedefs::{PIECES, Piecedef, S, Z};
+use crate::definitions::pieces::{PIECES, Piecedef, S, Z};
 use std::collections::VecDeque;
 
 pub struct Randomizer {

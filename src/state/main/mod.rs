@@ -1,14 +1,17 @@
 use ggez::{timer, event};
 use super::TetrisState;
+use super::CaveState;
 use crate::Config;
 
 pub enum State {
     Tetris,
+    Cave,
 }
 
 pub struct MainState {
     current_state: State,
     tetris_game: TetrisState,
+    cave: CaveState,
     config: Config
 }
 
@@ -17,6 +20,7 @@ impl MainState {
         Ok(MainState {
             current_state: State::Tetris,
             tetris_game: TetrisState::new(ctx)?,
+            cave: CaveState::new(ctx)?,
             config: Config::new(ctx)?,
         })
     }
@@ -29,6 +33,9 @@ impl event::EventHandler for MainState {
                 State::Tetris => {
                     self.tetris_game.update();
                 }
+                State::Cave => {
+                    self.cave.update();
+                }
             }
         }
         Ok(())
@@ -39,6 +46,9 @@ impl event::EventHandler for MainState {
             State::Tetris => {
                 self.tetris_game.draw(ctx)?;
             }
+            State::Cave => {
+                self.cave.draw(ctx)?;
+            }
         }
         Ok(())
     }
@@ -48,10 +58,21 @@ impl event::EventHandler for MainState {
             State::Tetris => {
                 self.tetris_game.key_down_event(keycode);
             }
+            State::Cave => {
+                self.cave.key_down_event(keycode);
+            }
+        }
+
+        if keycode == self.config.input.switch {
+            self.current_state = match self.current_state {
+                State::Tetris => State::Cave,
+                State::Cave => State::Tetris
+            };
         }
 
         if keycode == self.config.input.restart {
-            self.tetris_game = TetrisState::new(ctx).unwrap()
+            self.tetris_game = TetrisState::new(ctx).unwrap();
+            self.cave = CaveState::new(ctx).unwrap();
         }
     }
 
@@ -59,6 +80,9 @@ impl event::EventHandler for MainState {
         match self.current_state {
             State::Tetris => {
                 self.tetris_game.key_up_event(keycode);
+            }
+            State::Cave => {
+                self.cave.key_up_event(keycode);
             }
         }
     }
