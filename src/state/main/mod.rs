@@ -22,7 +22,7 @@ impl MainState {
     }
 }
 
-impl event::EventHandler for MainState {
+impl event::EventHandler<ggez::GameError> for MainState {
     fn update(&mut self, ctx: &mut ggez::Context) -> ggez::GameResult<()> {
         while timer::check_update_time(ctx, 60) {
             match self.current_state {

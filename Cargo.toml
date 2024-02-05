@@ -5,8 +5,8 @@ authors = ["chinatsu <lolexplode@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-ggez = "0.5.1"
-rand = "0.7"
+ggez = "0.7"
+rand = "0.8.5"
 lazy_static = "1.4.0"
-toml = "0.5"
+toml = "0.8"
 serde = { version = "1.0", features = ["derive"] }

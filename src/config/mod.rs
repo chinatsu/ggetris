@@ -49,7 +49,7 @@ impl Config {
         let mut file = filesystem::open(ctx, "/config.toml")?;
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
-        let config: TomlConfig = toml::from_slice(&buffer).unwrap();
+        let config: TomlConfig = toml::from_str(&String::from_utf8(buffer).unwrap()).unwrap();
 
         Ok(Config {
             input: InputConfig {

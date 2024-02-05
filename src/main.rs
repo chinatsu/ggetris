@@ -4,7 +4,8 @@ use ggez::{
     ContextBuilder,
     conf::WindowMode,
     conf::WindowSetup,
-    event::run
+    event::run,
+    GameResult
 };
 use std::env;
 use std::path;
@@ -17,7 +18,7 @@ use state::MainState;
 use config::Config;
 use level::Level;
 
-pub fn main() {
+pub fn main() -> GameResult {
     let resource_dir = if let Ok(manifest_dir) = env::var("CARGO_MANIFEST_DIR") {
         let mut path = path::PathBuf::from(manifest_dir);
         path.push("resources");
@@ -26,7 +27,7 @@ pub fn main() {
         path::PathBuf::from("./resources")
     };
 
-    let (mut ctx, mut event_loop) =
+    let (mut ctx, event_loop) =
        ContextBuilder::new("ggetris", "chinatsu")
             .window_setup(WindowSetup {
                 title: "ggetris".to_string(),
@@ -40,9 +41,8 @@ pub fn main() {
                 ..Default::default()
             })
             .add_resource_path(resource_dir)
-            .build()
-            .unwrap();
+            .build()?;
             
-    let state = &mut MainState::new(&mut ctx).unwrap();
-    run(&mut ctx, &mut event_loop, state).unwrap();
+    let state = MainState::new(&mut ctx)?;
+    run(ctx, event_loop, state);
 }

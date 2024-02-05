@@ -73,7 +73,7 @@ impl TetrisState {
     }
 
     pub fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
-        graphics::clear(ctx, graphics::BLACK);
+        graphics::clear(ctx, graphics::Color::BLACK);
 
         self.background.render(ctx)?;
         self.matrix.render(ctx)?;
